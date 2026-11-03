@@ -2,23 +2,26 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Organización del Hogar & Anti-Procrastinación</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>HomeFlow • Rutinas & Zonas</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- SDKs de Firebase cargados por navegador -->
+  <!-- SDKs de Firebase -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // PEGA AQUÍ TUS CLAVES DE FIREBASE:
-  const firebaseConfig = {
-  apiKey: "AIzaSyBACZeoOJ80m9M1zqTSST1ZZt6525RBnmE",
-  authDomain: "homeflow-992f0.firebaseapp.com",
-  projectId: "homeflow-992f0",
-  storageBucket: "homeflow-992f0.firebasestorage.app",
-  messagingSenderId: "552797709232",
-  appId: "1:552797709232:web:18e591c40bc78111116c75"
-};
+    const firebaseConfig = {
+      apiKey: "AIzaSyBACZeoOJ80m9M1zqTSST1ZZt6525RBnmE",
+      authDomain: "homeflow-992f0.firebaseapp.com",
+      projectId: "homeflow-992f0",
+      storageBucket: "homeflow-992f0.firebasestorage.app",
+      messagingSenderId: "552797709232",
+      appId: "1:552797709232:web:18e591c40bc78111116c75"
+    };
 
     const app = initializeApp(firebaseConfig);
     window.db = getFirestore(app);
@@ -26,7 +29,6 @@
     window.firestoreGetDoc = getDoc;
     window.firestoreSetDoc = setDoc;
     
-    // Disparar carga de Firestore una vez inicializado
     window.dispatchEvent(new Event('firebase-ready'));
   </script>
 
@@ -34,264 +36,553 @@
     :root {
       --bg: #f8fafc;
       --card-bg: #ffffff;
-      --text: #1e293b;
+      --text: #0f172a;
       --text-muted: #64748b;
-      --primary: #0f766e;
-      --primary-hover: #115e59;
+      --primary: #0d9488;
+      --primary-dark: #0f766e;
+      --primary-soft: #f0fdfa;
       --accent: #f59e0b;
-      --border: #e2e8f0;
-      --success: #10b981;
-      --radius: 14px;
+      --danger: #ef4444;
+      --border: #f1f5f9;
+      --border-dark: #e2e8f0;
+      --radius: 18px;
+      --shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding-bottom: 75px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: 90px; }
 
     header {
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border);
-      padding: 1.25rem 1rem;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-dark);
+      padding: 1.1rem 1.25rem;
       position: sticky;
       top: 0;
-      z-index: 20;
-      text-align: center;
+      z-index: 30;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
-    header h1 { font-size: 1.15rem; font-weight: 700; color: var(--primary); }
-    header p { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+    .brand h1 { font-size: 1.15rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+    .brand p { font-size: 0.75rem; color: var(--text-muted); font-weight: 500; }
+    .week-pill {
+      background: var(--primary-soft);
+      border: 1px solid #ccfbf1;
+      color: var(--primary-dark);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    main { max-width: 600px; margin: 0 auto; padding: 1.25rem 1rem; }
+    .tab-content { display: none; animation: fadeIn 0.25s ease-out; }
+    .tab-content.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .card-title { font-size: 1rem; font-weight: 700; letter-spacing: -0.01em; }
+    .badge {
+      font-size: 0.75rem;
+      background: var(--primary-soft);
+      color: var(--primary-dark);
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-weight: 700;
+      border: 1px solid #ccfbf1;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      font-weight: 800;
+      margin: 1.2rem 0 0.5rem 0;
+    }
+    .section-title:first-child { margin-top: 0; }
+
+    .task-card {
+      background: #ffffff;
+      border: 1px solid var(--border-dark);
+      border-radius: 12px;
+      padding: 0.85rem;
+      margin-bottom: 0.55rem;
+      transition: all 0.2s ease;
+    }
+    .task-card:hover { border-color: #cbd5e1; }
+    .task-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .task-card input[type="checkbox"] {
+      width: 19px;
+      height: 19px;
+      margin-top: 2px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .task-content { flex: 1; }
+    .task-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      line-height: 1.35;
+      color: var(--text);
+    }
+    .task-card.done .task-title {
+      text-decoration: line-through;
+      color: #94a3b8;
+    }
+
+    details {
+      margin-top: 0.45rem;
+      font-size: 0.8rem;
+      color: #475569;
+    }
+    summary {
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      outline: none;
+      user-select: none;
+    }
+    .task-guide {
+      margin-top: 0.45rem;
+      padding: 0.6rem 0.75rem;
+      background: #f8fafc;
+      border-left: 3px solid var(--primary);
+      border-radius: 4px;
+      line-height: 1.45;
+    }
 
     nav {
       position: fixed;
       bottom: 0;
       left: 0;
       right: 0;
-      background: var(--card-bg);
-      border-top: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border-dark);
       display: flex;
       justify-content: space-around;
-      padding: 0.6rem 0.5rem;
-      z-index: 30;
+      padding: 0.65rem 0.5rem;
+      z-index: 40;
     }
     nav button {
       background: none;
       border: none;
       color: var(--text-muted);
       font-size: 0.75rem;
-      font-weight: 600;
+      font-weight: 700;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 3px;
       cursor: pointer;
+      transition: color 0.15s;
     }
     nav button.active { color: var(--primary); }
 
-    main { max-width: 640px; margin: 0 auto; padding: 1.25rem 1rem; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.2rem;
-      margin-bottom: 1.25rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
-    }
-    .card-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      margin-bottom: 0.75rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .badge {
-      font-size: 0.7rem;
-      background: #ccfbf1;
-      color: var(--primary);
-      padding: 2px 8px;
-      border-radius: 999px;
-      font-weight: 700;
-    }
-
-    .task-group { margin-bottom: 1rem; }
-    .task-group-title {
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
-      font-weight: 700;
-    }
-    .task-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 0.65rem 0.5rem;
-      border-bottom: 1px solid #f1f5f9;
-      font-size: 0.9rem;
-      line-height: 1.35;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-    .task-item:hover { background-color: #f8fafc; }
-    .task-item:last-child { border-bottom: none; }
-    .task-item input[type="checkbox"] {
-      margin-top: 3px;
-      width: 17px;
-      height: 17px;
-      accent-color: var(--primary);
-      cursor: pointer;
-    }
-    .task-item.done span {
-      text-decoration: line-through;
-      color: var(--text-muted);
-    }
-
-    .zone-select-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 1rem;
-    }
     select {
-      flex: 1;
-      padding: 0.6rem;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      font-size: 0.85rem;
-      background: var(--card-bg);
+      width: 100%;
+      padding: 0.75rem;
+      border-radius: 12px;
+      border: 1px solid var(--border-dark);
+      font-size: 0.88rem;
+      background: #ffffff;
       color: var(--text);
+      font-weight: 600;
+      margin-bottom: 1rem;
+      outline: none;
     }
 
-    .empujon-box {
-      text-align: center;
-      padding: 1.5rem 1rem;
-    }
-    .timer-display {
-      font-size: 3.2rem;
+    .empujon-box { text-align: center; padding: 2rem 1.25rem; }
+    .timer {
+      font-size: 3.5rem;
       font-weight: 800;
-      color: var(--primary);
-      font-variant-numeric: tabular-nums;
-      margin: 1rem 0;
+      color: var(--primary-dark);
+      letter-spacing: -0.04em;
+      margin: 1.2rem 0;
     }
-    .btn-row {
-      display: flex;
-      gap: 8px;
-      justify-content: center;
-      flex-wrap: wrap;
+    .mission-box {
+      background: var(--primary-soft);
+      border: 1px solid #ccfbf1;
+      border-radius: 14px;
+      padding: 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--primary-dark);
+      margin-bottom: 1.25rem;
+      line-height: 1.4;
     }
-    button.btn {
+    .btn-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .btn {
       background: var(--primary);
       color: white;
       border: none;
       padding: 0.75rem 1.25rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-      font-size: 0.9rem;
-    }
-    button.btn:hover { background: var(--primary-hover); }
-    button.btn-rescue { background: var(--accent); }
-    button.btn-rescue:hover { background: #d97706; }
-    button.btn-outline {
-      background: transparent;
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-    }
-
-    .action-card {
-      background: #f0fdf4;
-      border: 1px solid #bbf7d0;
       border-radius: 10px;
-      padding: 1rem;
-      margin: 1rem 0;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #166534;
+      font-weight: 700;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: transform 0.1s;
     }
+    .btn:active { transform: scale(0.98); }
+    .btn-rescue { background: var(--accent); }
+    .btn-ghost { background: transparent; border: 1px solid var(--border-dark); color: var(--text-muted); }
+
+    /* Estilos de la Pestaña de Progreso */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 1.25rem;
+    }
+    .metric-card {
+      background: #f8fafc;
+      border: 1px solid var(--border-dark);
+      border-radius: 14px;
+      padding: 1rem;
+      text-align: center;
+    }
+    .metric-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: 4px;
+    }
+    .metric-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+    .progress-bar-container {
+      background: #e2e8f0;
+      border-radius: 999px;
+      height: 10px;
+      width: 100%;
+      overflow: hidden;
+      margin: 8px 0 14px 0;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 999px;
+      transition: width 0.3s ease;
+    }
+    .status-alert {
+      padding: 0.85rem 1rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status-alert.good { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .status-alert.behind { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; }
   </style>
 </head>
 <body>
 
   <header>
-    <h1>Planificación Vertical del Hogar</h1>
-    <p>Rutinas Diarias & Rotación por 4 Alturas</p>
+    <div class="brand">
+      <h1>HomeFlow</h1>
+      <p id="today-date">Cargando fecha...</p>
+    </div>
+    <div class="week-pill" id="current-week-label">Semana activa</div>
   </header>
 
   <main>
     <!-- TAB 1: RUTINAS DIARIAS -->
     <section id="tab-diarias" class="tab-content active">
       <div class="card">
-        <div class="card-title">
-          <span>Rutinas de Supervivencia</span>
+        <div class="card-header">
+          <div class="card-title">Rutinas Diarias de Mantenimiento</div>
           <span class="badge" id="daily-progress">0/11</span>
         </div>
 
-        <div class="task-group">
-          <div class="task-group-title">🌅 Mañana (Arranque ágil)</div>
-          <label class="task-item"><input type="checkbox" data-daily="m1"><span>Planta 1 y 2: Camas estiradas y ventilación rápida (5 min).</span></label>
-          <label class="task-item"><input type="checkbox" data-daily="m2"><span>Repaso exprés baños: bayeta a lavabo/grifo e inodoro (P1 y Aseo PB).</span></label>
-          <label class="task-item"><input type="checkbox" data-daily="m3"><span>Ruta colada: bajar ropa sucia del cesto de P1 directo a lavadora en sótano.</span></label>
-          <label class="task-item"><input type="checkbox" data-daily="m4"><span>Planta Baja: Vaciar lavavajillas para recibir el día despejados.</span></label>
+        <div class="section-title">🌅 Mañana (Arranque ágil)</div>
+        
+        <div class="task-card">
+          <div class="task-header">
+            <input type="checkbox" data-daily="m1" data-period="morning">
+            <div class="task-content">
+              <div class="task-title">Planta 1 y 2: Camas estiradas y ventilación rápida</div>
+              <details>
+                <summary>Detalles / Guía</summary>
+                <div class="task-guide">
+                  <p>• <b>Tiempo:</b> 5 minutos máximo.</p>
+                  <p>• <b>Cómo hacerlo:</b> Abrir ventanas de par en par. No busques perfección de hotel: estira sábanas, sube el edredón y ahueca almohadas. El objetivo es airear el ambiente y romper el caos visual de la noche.</p>
+                </div>
+              </details>
+            </div>
+          </div>
         </div>
 
-        <div class="task-group">
-          <div class="task-group-title">☀️ Mediodía (Cocina & Colada)</div>
-          <label class="task-item"><input type="checkbox" data-daily="d1"><span>Cocina X-J-V: Equipo niños (mesa, lavavajillas y bayeta). L-M: Adultos.</span></label>
-          <label class="task-item"><input type="checkbox" data-daily="d2"><span>Sótano: Poner lavadora del día y tender/secar.</span></label>
+        <div class="task-card">
+          <div class="task-header">
+            <input type="checkbox" data-daily="m2" data-period="morning">
+            <div class="task-content">
+              <div class="task-title">Repaso exprés de baños (P1 familiar y Aseo PB)</div>
+              <details>
+                <summary>Detalles / Guía</summary>
+                <div class="task-guide">
+                  <p>• <b>Tiempo:</b> 2 minutos por baño.</p>
+                  <p>• <b>Cómo hacerlo:</b> Bayeta de microfibra humedecida para limpiar gotas del grifo, lavabo y espejo. Pasar una toallita o bayeta al asiento del inodoro. Con esto se evita tener que rascar cal acumulada a final de semana.</p>
+                </div>
+              </details>
+            </div>
+          </div>
         </div>
 
-        <div class="task-group">
-          <div class="task-group-title">🌙 Noche («Casa a dormir» en familia)</div>
-          <label class="task-item"><input type="checkbox" data-daily="n1"><span>Misión peques: Despejar escritorios (mesa despejada para mañana).</span></label>
-          <label class="task-item"><input type="checkbox" data-daily="n2"><span>Ropa sucia peques: Ropa del día directa al cesto del baño de P1.</span></label>
-          <label class="task-item"><input type="checkbox" data-daily="n3"><span>Barrido de 5 min: Suelo libre de juguetes (dormitorios y cuarto de juegos).</span></label>
-          <label class="task-item"><input type="checkbox" data-daily="n4"><span>Cocina cerrada: Fregadero despejado y lavavajillas funcionando.</span></label>
-          <label class="task-item"><input type="checkbox" data-daily="n5"><span>Escalera despejada: Ningún objeto pernocta en los peldaños.</span></label>
+        <div class="task-card">
+          <div class="task-header">
+            <input type="checkbox" data-daily="m3" data-period="morning">
+            <div class="task-content">
+              <div class="task-title">Ruta colada: cesto de P1 directo a la lavadora del sótano</div>
+              <details>
+                <summary>Detalles / Guía</summary>
+                <div class="task-guide">
+                  <p>• <b>Regla vertical:</b> Al bajar a desayunar o arrancar la mañana, pasa por el baño de la Planta 1, coge la ropa sucia acumulada y bájala directa al sótano sin hacer viajes en balde.</p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-card">
+          <div class="task-header">
+            <input type="checkbox" data-daily="m4" data-period="morning">
+            <div class="task-content">
+              <div class="task-title">Planta Baja: Vaciar lavavajillas para el día</div>
+              <details>
+                <summary>Detalles / Guía</summary>
+                <div class="task-guide">
+                  <p>• <b>Tiempo:</b> 3 minutos.</p>
+                  <p>• <b>Objetivo:</b> Dejar el lavavajillas completamente vacío antes de que empiece el movimiento. Así cualquier vaso o plato sucio del desayuno entra directo al aparato y el fregadero se mantiene limpio.</p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">☀️ Mediodía (Cocina & Colada)</div>
+
+        <div class="task-card">
+          <div class="task-header">
+            <input type="checkbox" data-daily="d1" data-period="noon">
+            <div class="task-content">
+              <div class="task-title">Cocina post-comida (X-J-V niños / L-M adultos)</div>
+              <details>
+                <summary>Detalles / Guía</summary>
+                <div class="task-guide">
+                  <p>• <b>X, J y V:</b> Misión de los peques. Retiran fuentes, meten platos al lavavajillas y pasan bayeta a la mesa grande.</p>
+                  <p>• <b>L y M:</b> Misión adultos. Dejar encimera y placa despejadas para la tarde.</p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-card">
+          <div class="task-header">
+            <input type="checkbox" data-daily="d2" data-period="noon">
+            <div class="task-content">
+              <div class="task-title">Sótano: Poner lavadora del día y tender/secar</div>
+              <details>
+                <summary>Detalles / Guía</summary>
+                <div class="task-guide">
+                  <p>• Poner la carga matutina para evitar que se acumulen montañas de ropa de cinco personas. Tender o pasar a secadora nada más terminar.</p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title">🌙 Noche («Casa a dormir» en familia)</div>
+
+        <div class="task-card">
+          <div class="task-header">
+            <input type="checkbox" data-daily="n1" data-period="night">
+            <div class="task-content">
+              <div class="task-title">Misión peques: Despejar escritorios en Planta 1</div>
+              <details>
+                <summary>Detalles / Guía</summary>
+                <div class="task-guide">
+                  <p>• Libros a la estantería, rotuladores al estuche y mesa limpia. Arrancar el día siguiente con el escritorio despejado reduce la pereza escolar.</p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-card">
+          <div class="task-header">
+            <input type="checkbox" data-daily="n2" data-period="night">
+            <div class="task-content">
+              <div class="task-title">Ropa sucia peques: directa al cesto del baño de P1</div>
+              <details>
+                <summary>Detalles / Guía</summary>
+                <div class="task-guide">
+                  <p>• Cero prendas en el suelo o en sillas. Al ponerse el pijama, la ropa usada viaja de inmediato a su contenedor del baño.</p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-card">
+          <div class="task-header">
+            <input type="checkbox" data-daily="n3" data-period="night">
+            <div class="task-content">
+              <div class="task-title">Barrido de 5 min: Suelo libre de juguetes</div>
+              <details>
+                <summary>Detalles / Guía</summary>
+                <div class="task-guide">
+                  <p>• Música rápida o temporizador de 5 minutos: peques recogen piezas del suelo del salón, dormitorios y cuarto de juegos en sus cajas.</p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-card">
+          <div class="task-header">
+            <input type="checkbox" data-daily="n4" data-period="night">
+            <div class="task-content">
+              <div class="task-title">Cocina cerrada: Fregadero despejado y lavavajillas ON</div>
+              <details>
+                <summary>Detalles / Guía</summary>
+                <div class="task-guide">
+                  <p>• Filosofía nórdica: Nunca irse a dormir con cacharros sucios en la pila. Poner pastilla, programar lavavajillas y repasar encimera.</p>
+                </div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <div class="task-card">
+          <div class="task-header">
+            <input type="checkbox" data-daily="n5" data-period="night">
+            <div class="task-content">
+              <div class="task-title">Escalera despejada: Ningún objeto pernocta en peldaños</div>
+              <details>
+                <summary>Detalles / Guía</summary>
+                <div class="task-guide">
+                  <p>• En la última subida a descansar, cada persona recoge lo suyo del descansillo o escalones y lo devuelve a su planta.</p>
+                </div>
+              </details>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 2: ZONAS (ROTACIÓN MENSUAL) -->
+    <!-- TAB 2: ZONAS POR ALTURA -->
     <section id="tab-zonas" class="tab-content">
       <div class="card">
-        <div class="card-title">
-          <span>Foco Mensual por Altura</span>
+        <div class="card-header">
+          <div class="card-title">Foco de Zona (15 min al día)</div>
+          <span class="badge" id="zone-status-badge">Semana detectada</span>
         </div>
-        <div class="zone-select-row">
-          <select id="zone-selector" onchange="renderZoneTasks()">
-            <option value="z1">Semana 1: Zona 1 – Escalera, Entrada y Porche</option>
-            <option value="z2">Semana 2: Zona 2 – Planta Baja (Convivencia y Cocina)</option>
-            <option value="z3">Semana 3: Zona 3 – Planta 1 (Niños y Baño familiar)</option>
-            <option value="z4">Semana 4: Zona 4 – Planta 2 (Dormitorio y Despacho)</option>
-            <option value="z5">Semana 5: Zona 5 – Sótano y Exteriores</option>
-          </select>
-        </div>
+        
+        <select id="zone-selector" onchange="renderZoneTasks()">
+          <option value="z1">Semana 1: Zona 1 – Escalera, Entrada y Porche</option>
+          <option value="z2">Semana 2: Zona 2 – Planta Baja (Convivencia y Cocina)</option>
+          <option value="z3">Semana 3: Zona 3 – Planta 1 (Niños y Baño familiar)</option>
+          <option value="z4">Semana 4: Zona 4 – Planta 2 (Dormitorio y Despacho)</option>
+          <option value="z5">Semana 5: Zona 5 – Sótano y Exteriores</option>
+        </select>
+
         <div id="zone-task-list"></div>
       </div>
     </section>
 
-    <!-- TAB 3: EMPUJÓN ANTI-PROCRASTINACIÓN -->
+    <!-- TAB 3: MODO EMPUJÓN -->
     <section id="tab-empujon" class="tab-content">
       <div class="card empujon-box">
-        <h3>Modo Anti-Procrastinación</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
-          Rompe la inercia con una sola acción concreta y temporizador estricto.
+        <h2 style="font-size: 1.15rem; font-weight: 800;">Micro-Acción Inmediata</h2>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">
+          Rompe la parálisis con un reto cerrado y cronometrado.
         </p>
 
-        <div id="action-prompt" class="action-card">
-          Pulsa el botón para recibir tu misión de hoy
+        <div id="action-prompt" class="mission-box">
+          Pulsa un botón para recibir tu micro-misión de la semana
         </div>
 
-        <div class="timer-display" id="timer">15:00</div>
+        <div class="timer" id="timer">15:00</div>
 
         <div class="btn-row">
           <button class="btn" onclick="startRandomTask(15)">🎯 Foco 15 min (19:00 h)</button>
           <button class="btn btn-rescue" onclick="startRandomTask(5)">⚡ Rescate 5 min</button>
-          <button class="btn btn-outline" onclick="pauseTimer()">Pausar</button>
-          <button class="btn btn-outline" onclick="resetTimer()">Reiniciar</button>
+          <button class="btn btn-ghost" onclick="toggleTimer()" id="btn-play-pause">Pausar</button>
+          <button class="btn btn-ghost" onclick="resetTimer()">Reiniciar</button>
         </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: SEGUIMIENTO & PROGRESO -->
+    <section id="tab-progreso" class="tab-content">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Termómetro del Hogar</div>
+          <span class="badge" id="time-badge">En tiempo real</span>
+        </div>
+
+        <div id="status-alert-box" class="status-alert good" style="margin-bottom: 1rem;">
+          <span id="status-icon">✨</span>
+          <span id="status-msg">Cargando estado...</span>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-card">
+            <div class="metric-label">Hechas Hoy</div>
+            <div class="metric-value" id="metric-done">0</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label">Deberían Estar</div>
+            <div class="metric-value" id="metric-expected">0</div>
+          </div>
+        </div>
+
+        <div style="font-size: 0.85rem; font-weight: 700; margin-top: 0.5rem; display: flex; justify-content: space-between;">
+          <span>Cumplimiento Diario</span>
+          <span id="daily-percent">0%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="daily-bar" style="width: 0%;"></div>
+        </div>
+
+        <div style="font-size: 0.85rem; font-weight: 700; margin-top: 1rem; display: flex; justify-content: space-between;">
+          <span>Zona Activa de la Semana</span>
+          <span id="zone-percent">0%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="zone-bar" style="width: 0%; background: var(--accent);"></div>
+        </div>
+        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: -6px;" id="zone-counter-text">
+          0 de 5 tareas de fondo completadas
+        </p>
       </div>
     </section>
   </main>
@@ -304,7 +595,10 @@
       <span>🏢</span><span>Zonas</span>
     </button>
     <button onclick="switchTab('tab-empujon', this)">
-      <span>⏱️</span><span>Empujón</span>
+      <span>⚡</span><span>Empujón</span>
+    </button>
+    <button onclick="switchTab('tab-progreso', this)">
+      <span>📊</span><span>Progreso</span>
     </button>
   </nav>
 
@@ -313,52 +607,52 @@
       z1: {
         title: "Zona 1: Escalera, Entrada y Porche",
         tasks: [
-          "Despejar peldaños a cero y vaciar bandejas de descansillo.",
-          "Aspirar o barrer tramos de escalera de arriba abajo.",
-          "Organizar calzado y abrigos en el recibidor.",
-          "Barrer el porche delantero y sacudir felpudo.",
-          "Limpiar huellas de la barandilla y pomo exterior."
+          { title: "Despejar peldaños a cero y vaciar cestos de descansillo", guide: "Recorre los tramos desde el sótano hasta la planta 2. Devuelve cada objeto varado a la planta donde pertenece." },
+          { title: "Aspirar o barrer tramos de escalera de arriba abajo", guide: "Empieza siempre por el piso superior hacia abajo. Un tramo al día es suficiente." },
+          { title: "Organizar calzado y abrigos en el recibidor", guide: "Quita del perchero lo que no se use a diario y alinea los zapatos." },
+          { title: "Barrer el porche delantero y sacudir felpudo", guide: "Sacude el felpudo fuera y pasa un barrido rápido al porche." },
+          { title: "Limpiar huellas de la barandilla y pomo exterior", guide: "Pasa una bayeta con desinfectante suave por todo el pasamanos y pomos." }
         ]
       },
       z2: {
         title: "Zona 2: Planta Baja (Convivencia y Cocina)",
         tasks: [
-          "Superficie del «mueblo»: despejarlo a cero y reubicar trastos.",
-          "Mesita frente al sofá: despejar vasos, mandos y pasar bayeta.",
-          "Quitar el polvo del salón (mueble TV, estantes y superficies).",
-          "Limpiar una balda o cajón interior de la nevera.",
-          "Limpiar interior de microondas y frontal del horno.",
-          "Aspirar bajo los cojines y base del sofá."
+          { title: "Superficie del «mueblo»: despejarlo a cero", guide: "Retira absolutamente todo lo acumulado sobre el aparador. Clasifica y limpia la madera." },
+          { title: "Mesita frente al sofá: despejar y limpiar", guide: "Quita vasos, mandos y trastos. Deja solo lo esencial." },
+          { title: "Quitar el polvo del salón (estantes, mueble TV)", guide: "Usa plumero o microfibra ligeramente húmeda sin mover adornos pesados." },
+          { title: "Nevera: limpiar y ordenar una sola balda o cajón", guide: "Saca los botes de una sola balda, tira lo caducado y limpia en 5 minutos." },
+          { title: "Limpieza exprés de microondas y puerta del horno", guide: "Vaso con agua y limón 2 min al microondas y bayeta. Limpiacristales al horno." },
+          { title: "Aspirar base y cojines del sofá", guide: "Retira cojines superiores, aspira migas o polvo acumulado y recoloca." }
         ]
       },
       z3: {
         title: "Zona 3: Planta 1 (Territorio Niños y Baño)",
         tasks: [
-          "Baño familiar: desinfección a fondo de bañera/ducha y mampara.",
-          "Caza de juguetes: 10 min con peques clasificando cajas temáticas.",
-          "Cajones infantiles: cribar 5 prendas pequeñas o calcetines sueltos.",
-          "Aspirar a fondo el suelo del cuarto de juegos.",
-          "Revisión de mochilas y material escolar en escritorios."
+          { title: "Baño familiar: desinfección a fondo de bañera/ducha", guide: "Aplica antical a grifería y mampara, deja actuar 5 minutos y aclara." },
+          { title: "Caza de juguetes: 10 min clasificando cajas temáticas", guide: "Con los peques: una caja para muñecos, otra para construcciones/piezas." },
+          { title: "Cajones infantiles: cribar 5 prendas pequeñas o calcetines", guide: "Revisar un solo cajón de ropa con ellos y apartar lo que ya no sirva." },
+          { title: "Aspirar a fondo el suelo del cuarto de juegos", guide: "Despejar cajas al sofá o cama, aspirar rodapiés y esquinas." },
+          { title: "Revisión de mochilas y material escolar", guide: "Vaciar papeles viejos del fondo de las mochilas y afilar lápices." }
         ]
       },
       z4: {
         title: "Zona 4: Planta 2 (Dormitorio y Despacho)",
         tasks: [
-          "Escritorio de estudio: despejar papeles sueltos y organizar cables.",
-          "Mesitas de noche: retirar objetos intrusos y pasar bayeta.",
-          "Armario principal: ordenar una balda o repaso de perchas.",
-          "Aspirar suelo y rodapiés de la zona de estudio.",
-          "Ventilación profunda y sacudir textiles/mantas."
+          { title: "Escritorio de estudio: despejar papeles sueltos y cables", guide: "Clasifica apuntes y papeles: lo que sirva a su carpeta, lo desechable al contenedor." },
+          { title: "Mesitas de noche: retirar objetos intrusos y bayeta", guide: "Retira vasos de agua, tickets o libros ya leídos." },
+          { title: "Armario principal: ordenar una balda o perchas", guide: "Revisa una balda: doblar prendas caídas o alinear perchas." },
+          { title: "Aspirar suelo y rodapiés de la zona de estudio", guide: "Mueve la silla de trabajo, aspira pelusas acumuladas bajo la mesa." },
+          { title: "Ventilación profunda y sacudir textiles", guide: "Ventilar 15 min, sacudir mantas o cojines por la ventana o terraza." }
         ]
       },
       z5: {
         title: "Zona 5: Sótano y Exteriores",
         tasks: [
-          "Despensa: revisar caducidades de una balda y alinear básicos.",
-          "Zona colada: limpiar filtro de lavadora y bandeja de jabón.",
-          "Deshacer o clasificar una caja acumulada en el garaje.",
-          "Jardín: barrer hojas o dar un repaso de riego.",
-          "Plegar y desechar cartones/reciclaje acumulado."
+          { title: "Despensa: revisar caducidades de una balda y alinear", guide: "Comprueba latas y conservas de una balda. Pon lo que caduca antes delante." },
+          { title: "Zona colada: limpiar filtro de lavadora y bandeja de jabón", guide: "Extrae el cajón del detergente, lávalo bajo el grifo y limpia la goma." },
+          { title: "Deshacer o clasificar una caja acumulada en el garaje", guide: "Toma solo una caja con trastos y decide qué se queda y qué se tira." },
+          { title: "Jardín: barrer hojas o dar un repaso de riego", guide: "Repaso ligero de hojas secas o regar macetas." },
+          { title: "Plegar y desechar cartones/reciclaje acumulado", guide: "Plegar cajas de paquetes acumuladas en el garaje y dejarlas listas para reciclar." }
         ]
       }
     };
@@ -368,21 +662,41 @@
       document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
       btn.classList.add('active');
+      if (tabId === 'tab-progreso') updateProgressMetrics();
+    }
+
+    function calculateCurrentWeek() {
+      const today = new Date();
+      const dayOfMonth = today.getDate();
+      let weekNum = Math.ceil(dayOfMonth / 7);
+      if (weekNum > 5) weekNum = 5;
+
+      const zoneKey = 'z' + weekNum;
+      const selector = document.getElementById('zone-selector');
+      if (selector) selector.value = zoneKey;
+
+      const weekLabel = document.getElementById('current-week-label');
+      if (weekLabel) weekLabel.innerText = `Semana ${weekNum} activa`;
+
+      const badge = document.getElementById('zone-status-badge');
+      if (badge) badge.innerText = `Zona ${weekNum} (Auto)`;
+
+      const options = { weekday: 'long', day: 'numeric', month: 'short' };
+      document.getElementById('today-date').innerText = today.toLocaleDateString('es-ES', options);
+
+      return zoneKey;
     }
 
     const todayStr = new Date().toISOString().slice(0, 10);
     const dailyCheckboxes = document.querySelectorAll('input[data-daily]');
 
-    // Sincronización en la nube (Firestore)
     async function syncToFirebase(type, id, value) {
       if (!window.db) return;
       try {
         const docRef = window.firestoreDoc(window.db, "hogar", todayStr);
-        await window.firestoreSetDoc(docRef, {
-          [type]: { [id]: value }
-        }, { merge: true });
+        await window.firestoreSetDoc(docRef, { [type]: { [id]: value } }, { merge: true });
       } catch (err) {
-        console.error("Error al guardar en Firebase:", err);
+        console.error("Error Firebase:", err);
       }
     }
 
@@ -396,7 +710,7 @@
             dailyCheckboxes.forEach(cb => {
               if (data.dailies[cb.dataset.daily] !== undefined) {
                 cb.checked = data.dailies[cb.dataset.daily];
-                if (cb.checked) cb.parentElement.classList.add('done');
+                toggleCardDone(cb);
                 localStorage.setItem('daily_' + cb.dataset.daily, cb.checked);
               }
             });
@@ -410,11 +724,18 @@
           }
         }
       } catch (e) {
-        console.warn("Usando almacenamiento local offline");
+        console.warn("Modo offline");
       }
     });
 
-    // Carga local
+    function toggleCardDone(cb) {
+      const card = cb.closest('.task-card');
+      if (card) {
+        if (cb.checked) card.classList.add('done');
+        else card.classList.remove('done');
+      }
+    }
+
     function loadDailyProgress() {
       const savedDate = localStorage.getItem('daily_date');
       if (savedDate !== todayStr) {
@@ -422,12 +743,13 @@
         dailyCheckboxes.forEach(cb => {
           cb.checked = false;
           localStorage.removeItem('daily_' + cb.dataset.daily);
+          toggleCardDone(cb);
         });
       } else {
         dailyCheckboxes.forEach(cb => {
           const val = localStorage.getItem('daily_' + cb.dataset.daily);
           cb.checked = (val === 'true');
-          if (cb.checked) cb.parentElement.classList.add('done');
+          toggleCardDone(cb);
         });
       }
       updateDailyCount();
@@ -436,8 +758,7 @@
     dailyCheckboxes.forEach(cb => {
       cb.addEventListener('change', () => {
         localStorage.setItem('daily_' + cb.dataset.daily, cb.checked);
-        if (cb.checked) cb.parentElement.classList.add('done');
-        else cb.parentElement.classList.remove('done');
+        toggleCardDone(cb);
         updateDailyCount();
         syncToFirebase('dailies', cb.dataset.daily, cb.checked);
       });
@@ -447,36 +768,100 @@
       const total = dailyCheckboxes.length;
       const checked = Array.from(dailyCheckboxes).filter(cb => cb.checked).length;
       document.getElementById('daily-progress').innerText = `${checked}/${total}`;
+      updateProgressMetrics();
     }
 
     function renderZoneTasks() {
       const zoneKey = document.getElementById('zone-selector').value;
       const zone = zoneData[zoneKey];
       const container = document.getElementById('zone-task-list');
+      
       container.innerHTML = zone.tasks.map((task, idx) => `
-        <label class="task-item">
-          <input type="checkbox" data-zone="${zoneKey}_${idx}" onchange="toggleZoneTask(this)">
-          <span>${task}</span>
-        </label>
+        <div class="task-card">
+          <div class="task-header">
+            <input type="checkbox" data-zone="${zoneKey}_${idx}" onchange="toggleZoneTask(this)">
+            <div class="task-content">
+              <div class="task-title">${task.title}</div>
+              <details>
+                <summary>Detalles / Guía</summary>
+                <div class="task-guide"><p>${task.guide}</p></div>
+              </details>
+            </div>
+          </div>
+        </div>
       `).join('');
 
       container.querySelectorAll('input[data-zone]').forEach(cb => {
         const val = localStorage.getItem('zone_' + cb.dataset.zone);
         cb.checked = (val === 'true');
-        if (cb.checked) cb.parentElement.classList.add('done');
+        toggleCardDone(cb);
       });
+      updateProgressMetrics();
     }
 
     function toggleZoneTask(cb) {
       localStorage.setItem('zone_' + cb.dataset.zone, cb.checked);
-      if (cb.checked) cb.parentElement.classList.add('done');
-      else cb.parentElement.classList.remove('done');
+      toggleCardDone(cb);
       syncToFirebase('zones', cb.dataset.zone, cb.checked);
+      updateProgressMetrics();
+    }
+
+    // Cálculo Hecho vs. Debería Estar Hecho
+    function updateProgressMetrics() {
+      const totalDaily = dailyCheckboxes.length; // 11
+      const doneDaily = Array.from(dailyCheckboxes).filter(cb => cb.checked).length;
+
+      // Calcular tareas que "deberían" estar hechas según la hora
+      const now = new Date();
+      const currentHour = now.getHours();
+
+      let expectedDaily = 0;
+      if (currentHour >= 11) expectedDaily += 4; // Mañana (4 tareas)
+      if (currentHour >= 16) expectedDaily += 2; // Mediodía (2 tareas)
+      if (currentHour >= 21) expectedDaily += 5; // Noche (5 tareas)
+
+      document.getElementById('metric-done').innerText = doneDaily;
+      document.getElementById('metric-expected').innerText = expectedDaily;
+
+      const dailyPct = Math.round((doneDaily / totalDaily) * 100);
+      document.getElementById('daily-percent').innerText = `${dailyPct}%`;
+      document.getElementById('daily-bar').style.width = `${dailyPct}%`;
+
+      // Zona activa
+      const currentZoneKey = calculateCurrentWeek();
+      const zoneTasks = zoneData[currentZoneKey].tasks;
+      let doneZone = 0;
+      zoneTasks.forEach((_, idx) => {
+        if (localStorage.getItem(`zone_${currentZoneKey}_${idx}`) === 'true') doneZone++;
+      });
+      const zonePct = Math.round((doneZone / zoneTasks.length) * 100);
+      document.getElementById('zone-percent').innerText = `${zonePct}%`;
+      document.getElementById('zone-bar').style.width = `${zonePct}%`;
+      document.getElementById('zone-counter-text').innerText = `${doneZone} de ${zoneTasks.length} tareas completadas en esta rotación`;
+
+      // Alerta dinámica
+      const alertBox = document.getElementById('status-alert-box');
+      const icon = document.getElementById('status-icon');
+      const msg = document.getElementById('status-msg');
+
+      if (doneDaily >= expectedDaily) {
+        alertBox.className = 'status-alert good';
+        icon.innerText = '✨';
+        msg.innerText = doneDaily === totalDaily 
+          ? '¡Día 100% completado! Toda la casa al día.' 
+          : 'Vas al día o por delante del ritmo previsto para esta hora.';
+      } else {
+        alertBox.className = 'status-alert behind';
+        icon.innerText = '⏳';
+        const diff = expectedDaily - doneDaily;
+        msg.innerText = `Tienes ${diff} ${diff === 1 ? 'tarea pendiente' : 'tareas pendientes'} según la hora actual. ¡Un empujón de 5 min y te pones al día!`;
+      }
     }
 
     // Temporizador
     let timerInterval = null;
     let secondsLeft = 900;
+    let isRunning = false;
 
     function playBeep() {
       try {
@@ -508,7 +893,10 @@
       const zoneKey = document.getElementById('zone-selector').value;
       const tasks = zoneData[zoneKey].tasks;
       const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
-      document.getElementById('action-prompt').innerText = randomTask;
+      document.getElementById('action-prompt').innerText = randomTask.title;
+
+      isRunning = true;
+      document.getElementById('btn-play-pause').innerText = 'Pausar';
 
       timerInterval = setInterval(() => {
         if (secondsLeft > 0) {
@@ -516,21 +904,46 @@
           updateTimerDisplay();
         } else {
           clearInterval(timerInterval);
+          isRunning = false;
           playBeep();
-          alert('¡Tiempo cumplido! Excelente micro-victoria.');
+          alert('¡Micro-misión cumplida! Descansa y celebra.');
         }
       }, 1000);
     }
 
-    function pauseTimer() { clearInterval(timerInterval); }
+    function toggleTimer() {
+      if (isRunning) {
+        clearInterval(timerInterval);
+        isRunning = false;
+        document.getElementById('btn-play-pause').innerText = 'Reanudar';
+      } else if (secondsLeft > 0) {
+        isRunning = true;
+        document.getElementById('btn-play-pause').innerText = 'Pausar';
+        timerInterval = setInterval(() => {
+          if (secondsLeft > 0) {
+            secondsLeft--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            isRunning = false;
+            playBeep();
+          }
+        }, 1000);
+      }
+    }
+
     function resetTimer() {
       clearInterval(timerInterval);
+      isRunning = false;
       secondsLeft = 900;
+      document.getElementById('btn-play-pause').innerText = 'Pausar';
       updateTimerDisplay();
     }
 
+    calculateCurrentWeek();
     loadDailyProgress();
     renderZoneTasks();
+    updateProgressMetrics();
   </script>
 </body>
 </html>
