@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>HomeFlow • Rutinas & Zonas</title>
+  <title>HomeFlow • Dashboard del Hogar</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -93,7 +93,7 @@
       font-weight: 700;
     }
 
-    main { max-width: 600px; margin: 0 auto; padding: 1.25rem 1rem; }
+    main { max-width: 620px; margin: 0 auto; padding: 1.25rem 1rem; }
     .tab-content { display: none; animation: fadeIn 0.25s ease-out; }
     .tab-content.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -110,9 +110,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
+      margin-bottom: 0.85rem;
     }
-    .card-title { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.01em; }
+    .card-title { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.01em; display: flex; align-items: center; gap: 6px; }
     .badge {
       font-size: 0.75rem;
       background: #eef8f5;
@@ -123,6 +123,61 @@
       border: 1px solid #c7ebd8;
     }
 
+    /* Termómetro de cabecera integrado */
+    .metric-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 0.85rem;
+    }
+    .metric-card {
+      background: #faf8f5;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.75rem;
+      text-align: center;
+    }
+    .metric-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--accent-terracota);
+    }
+    .metric-label {
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+    .progress-bar-container {
+      background: #eee8de;
+      border-radius: 999px;
+      height: 9px;
+      width: 100%;
+      overflow: hidden;
+      margin: 6px 0 10px 0;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--accent-eucalyptus);
+      border-radius: 999px;
+      transition: width 0.35s ease;
+    }
+    .status-alert {
+      padding: 0.75rem 0.9rem;
+      border-radius: 12px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 0.75rem;
+    }
+    .status-alert.good { background: #eef8f5; color: #1e6b5a; border: 1px solid #c7ebd8; }
+    .status-alert.behind { background: #fdf5ea; color: #9c6812; border: 1px solid #fae1b8; }
+
+    /* Secciones y Tareas */
     .section-title {
       font-size: 0.75rem;
       text-transform: uppercase;
@@ -132,7 +187,7 @@
       margin: 1.2rem 0 0.5rem 0;
       display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: space-between;
     }
     .section-title:first-child { margin-top: 0; }
 
@@ -140,8 +195,8 @@
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 0.9rem;
-      margin-bottom: 0.6rem;
+      padding: 0.85rem;
+      margin-bottom: 0.55rem;
       transition: all 0.2s ease;
       position: relative;
     }
@@ -161,7 +216,7 @@
     }
     .task-content { flex: 1; }
     .task-title {
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       font-weight: 600;
       line-height: 1.35;
       color: var(--text);
@@ -174,66 +229,52 @@
       text-decoration: line-through;
       color: #a8a29e;
     }
-
-    details {
-      margin-top: 0.45rem;
-      font-size: 0.8rem;
-      color: #57534e;
-    }
-    summary {
-      font-weight: 600;
-      color: var(--accent-terracota);
-      cursor: pointer;
-      outline: none;
-      user-select: none;
-    }
-    .task-guide {
-      margin-top: 0.45rem;
-      padding: 0.65rem 0.85rem;
-      background: #faf8f5;
-      border-left: 3px solid var(--accent-terracota);
-      border-radius: 6px;
-      line-height: 1.45;
-    }
-
-    .foco-box {
-      background: #fdfbf7;
-      border: 2px dashed var(--accent-mustard);
-      border-radius: 16px;
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-      text-align: center;
-    }
-    .foco-label {
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--accent-mustard);
-      margin-bottom: 6px;
-    }
-    .foco-task-text {
-      font-size: 1.05rem;
+    .btn-delete-task {
+      background: none;
+      border: none;
+      color: #cbd5e1;
+      font-size: 1rem;
       font-weight: 700;
-      color: var(--text);
-      line-height: 1.4;
-      margin-bottom: 12px;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 6px;
+      margin-left: 6px;
     }
+    .btn-delete-task:hover { color: #ef4444; background: #fee2e2; }
 
-    .btn-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    details { margin-top: 0.4rem; font-size: 0.78rem; color: #57534e; }
+    summary { font-weight: 600; color: var(--accent-terracota); cursor: pointer; outline: none; }
+    .task-guide { margin-top: 0.4rem; padding: 0.55rem 0.75rem; background: #faf8f5; border-left: 3px solid var(--accent-terracota); border-radius: 4px; line-height: 1.4; }
+
+    /* Añadir tarea rápida */
+    .add-task-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 0.85rem;
+    }
+    .add-task-input {
+      flex: 1;
+      padding: 0.6rem 0.8rem;
+      border: 1px dashed var(--border-dark);
+      border-radius: 10px;
+      font-size: 0.82rem;
+      background: #fff;
+      outline: none;
+    }
+    .add-task-input:focus { border-color: var(--accent-terracota); }
+
+    /* Botones y Navegación */
     .btn {
       background: var(--accent-eucalyptus);
       color: white;
       border: none;
-      padding: 0.75rem 1.25rem;
+      padding: 0.7rem 1.1rem;
       border-radius: 12px;
       font-weight: 700;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       cursor: pointer;
-      transition: transform 0.1s;
     }
-    .btn:active { transform: scale(0.97); }
-    .btn-sm { padding: 0.45rem 0.9rem; font-size: 0.8rem; border-radius: 8px; }
+    .btn-sm { padding: 0.4rem 0.75rem; font-size: 0.78rem; border-radius: 8px; }
     .btn-terracota { background: var(--accent-terracota); }
     .btn-mustard { background: var(--accent-mustard); color: #fff; }
     .btn-ghost { background: transparent; border: 1px solid var(--border-dark); color: var(--text-muted); }
@@ -262,130 +303,15 @@
       align-items: center;
       gap: 4px;
       cursor: pointer;
-      transition: color 0.15s;
     }
     nav button.active { color: var(--accent-terracota); }
 
-    select {
-      width: 100%;
-      padding: 0.8rem;
-      border-radius: 12px;
-      border: 1px solid var(--border-dark);
-      font-size: 0.9rem;
-      background: #ffffff;
-      color: var(--text);
-      font-weight: 700;
-      margin-bottom: 1.2rem;
-      outline: none;
-    }
-
     .empujon-box { text-align: center; padding: 2rem 1.25rem; }
-    .timer {
-      font-size: 3.6rem;
-      font-weight: 800;
-      color: var(--accent-slate-blue);
-      letter-spacing: -0.04em;
-      margin: 1.2rem 0;
-      font-variant-numeric: tabular-nums;
-    }
-    .mission-box {
-      background: #f0f7fa;
-      border: 1px solid #cce3ed;
-      border-radius: 14px;
-      padding: 1.2rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: var(--accent-slate-blue);
-      margin-bottom: 1.25rem;
-      line-height: 1.4;
-    }
+    .timer { font-size: 3.6rem; font-weight: 800; color: var(--accent-slate-blue); margin: 1.2rem 0; font-variant-numeric: tabular-nums; }
+    .mission-box { background: #f0f7fa; border: 1px solid #cce3ed; border-radius: 14px; padding: 1.2rem; font-size: 0.95rem; font-weight: 600; color: var(--accent-slate-blue); margin-bottom: 1.25rem; }
+    .btn-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 
-    .metric-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 1.25rem;
-    }
-    .metric-card {
-      background: #faf8f5;
-      border: 1px solid var(--border-dark);
-      border-radius: 14px;
-      padding: 1rem;
-      text-align: center;
-    }
-    .metric-value {
-      font-size: 1.85rem;
-      font-weight: 800;
-      color: var(--accent-terracota);
-      margin-top: 4px;
-    }
-    .metric-label {
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--text-muted);
-    }
-    .progress-bar-container {
-      background: #eee8de;
-      border-radius: 999px;
-      height: 10px;
-      width: 100%;
-      overflow: hidden;
-      margin: 8px 0 14px 0;
-    }
-    .progress-bar-fill {
-      height: 100%;
-      background: var(--accent-eucalyptus);
-      border-radius: 999px;
-      transition: width 0.35s ease;
-    }
-    .status-alert {
-      padding: 0.9rem 1rem;
-      border-radius: 14px;
-      font-size: 0.86rem;
-      font-weight: 600;
-      line-height: 1.4;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .status-alert.good { background: #eef8f5; color: #1e6b5a; border: 1px solid #c7ebd8; }
-    .status-alert.behind { background: #fdf5ea; color: #9c6812; border: 1px solid #fae1b8; }
-
-    .calendar-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 6px;
-      margin-top: 10px;
-    }
-    .calendar-day {
-      flex: 1;
-      background: #faf8f5;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px 4px;
-      text-align: center;
-    }
-    .calendar-day-name { font-size: 0.68rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; }
-    .calendar-day-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: #e5ddd0;
-      margin: 6px auto 0 auto;
-    }
-    .calendar-day-dot.active { background: var(--accent-eucalyptus); box-shadow: 0 0 6px rgba(42, 131, 112, 0.4); }
-
-    #confetti-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 100;
-    }
+    #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 100; }
   </style>
 </head>
 <body>
@@ -404,303 +330,19 @@
   </header>
 
   <main>
-    <!-- TAB 1: RUTINAS DIARIAS -->
-    <section id="tab-diarias" class="tab-content active">
+    <!-- TAB 1: PRINCIPAL (TODO INTEGRADO) -->
+    <section id="tab-dashboard" class="tab-content active">
       
-      <div class="foco-box" id="foco-container">
-        <div class="foco-label">⚡ Modo Foco: Tu siguiente micro-paso</div>
-        <div class="foco-task-text" id="foco-task-title">Cargando tarea...</div>
-        <button class="btn btn-sm btn-mustard" onclick="completeFocoTask()">✓ Completar y pasar a la siguiente</button>
-      </div>
-
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Rutinas Diarias del Hogar</div>
-          <span class="badge" id="daily-progress">0/14</span>
+      <!-- 1. TERMÓMETRO DE PROGRESO INTEGRADO -->
+      <div class="card" style="padding: 1rem 1.1rem; margin-bottom: 1rem;">
+        <div class="card-header" style="margin-bottom: 0.6rem;">
+          <div class="card-title" style="font-size: 0.95rem;">📊 Termómetro de Hoy</div>
+          <span class="badge" id="daily-progress-badge">0/0</span>
         </div>
 
-        <!-- 1. MAÑANA -->
-        <div class="section-title" style="color: var(--accent-mustard);">🌅 Mañana (Arranque ágil)</div>
-        
-        <div class="task-card" data-id="m1">
-          <div class="task-header">
-            <input type="checkbox" data-daily="m1">
-            <div class="task-content">
-              <div class="task-title">Planta 1 y 2: Camas estiradas y ventilación rápida</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• <b>Tiempo:</b> 5 minutos.</p>
-                  <p>• <b>Cómo:</b> Ventanas abiertas de par en par. Estirar sábanas y almohadas sin perfeccionismos. El objetivo es airear y resetear visualmente los cuartos.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card" data-id="m2">
-          <div class="task-header">
-            <input type="checkbox" data-daily="m2">
-            <div class="task-content">
-              <div class="task-title">Repaso exprés de baños (P1 familiar y Aseo PB)</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• <b>Tiempo:</b> 2 minutos por baño.</p>
-                  <p>• <b>Cómo:</b> Bayeta a lavabo/grifo para quitar salpicaduras y repaso al inodoro. Evita acumulación de cal sin frotar a fondo.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card" data-id="m3">
-          <div class="task-header">
-            <input type="checkbox" data-daily="m3">
-            <div class="task-content">
-              <div class="task-title">Ruta colada: cesto de P1 directo a lavadora en sótano</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• <b>Regla vertical:</b> Al bajar a desayunar o arrancar la jornada, coger la colada del cesto de P1 y dejarla directa en el sótano.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card" data-id="m4">
-          <div class="task-header">
-            <input type="checkbox" data-daily="m4">
-            <div class="task-content">
-              <div class="task-title">Planta Baja: Vaciar lavavajillas para el día</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• <b>Tiempo:</b> 3 minutos.</p>
-                  <p>• <b>Objetivo:</b> Lavavajillas vacío: cualquier plato sucio entra directo y el fregadero se mantiene despejado.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <!-- 2. MEDIODÍA -->
-        <div class="section-title" style="color: var(--accent-terracota);">☀️ Mediodía (Cocina & Colada)</div>
-
-        <div class="task-card" data-id="d1">
-          <div class="task-header">
-            <input type="checkbox" data-daily="d1">
-            <div class="task-content">
-              <div class="task-title">Cocina post-comida (X-J-V niños / L-M adultos)</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• <b>X, J y V:</b> Misión niños. Retiran platos, cargan lavavajillas y pasan bayeta a la mesa.</p>
-                  <p>• <b>L y M:</b> Misión adultos. Dejar encimera y placa despejadas.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card" data-id="d2">
-          <div class="task-header">
-            <input type="checkbox" data-daily="d2">
-            <div class="task-content">
-              <div class="task-title">Sótano: Poner lavadora del día y tender/secar</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• Poner la carga matutina para evitar montaña de ropa de cinco personas.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <!-- 3. RELEVO DE TARDE (17:00 – 19:00 h) -->
-        <div class="section-title" style="color: var(--accent-eucalyptus);">🤝 Tarde (Relevo & Sinergia 17:00 – 19:00 h)</div>
-
-        <div class="task-card" data-id="t1">
-          <div class="task-header">
-            <input type="checkbox" data-daily="t1">
-            <div class="task-content">
-              <div class="task-title">17:00 h • Fin de jornada y puesta en común rápida</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• <b>Desconexión:</b> Cierre del despacho en P2. 1 minuto para coordinar quién se encarga de la cena o de acompañar a los peques con tareas.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card" data-id="t2">
-          <div class="task-header">
-            <input type="checkbox" data-daily="t2">
-            <div class="task-content">
-              <div class="task-title">17:30 h • Puesta en marcha de la cena (anticipación)</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• Sacar ingredientes, descongelar o encender horno/fuegos con tiempo para no llegar a las 21:00 h con estrés ni prisas.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card" data-id="t3">
-          <div class="task-header">
-            <input type="checkbox" data-daily="t3">
-            <div class="task-content">
-              <div class="task-title">19:00 h • Foco 15 min en equipo (Zona del mes)</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• Tras el aviso de vuestro reloj, 15 minutos en la zona activa (pestaña Empujón). Uno ataca un punto de la planta activa y el otro da soporte o supervisa a los peques.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <!-- 4. NOCHE -->
-        <div class="section-title" style="color: var(--accent-slate-blue);">🌙 Noche («Casa a dormir» en familia)</div>
-
-        <div class="task-card" data-id="n1">
-          <div class="task-header">
-            <input type="checkbox" data-daily="n1">
-            <div class="task-content">
-              <div class="task-title">Misión peques: Despejar escritorios en Planta 1</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• Libros a baldas, estuche cerrado y mesa despejada para arrancar bien la mañana.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card" data-id="n2">
-          <div class="task-header">
-            <input type="checkbox" data-daily="n2">
-            <div class="task-content">
-              <div class="task-title">Ropa sucia peques: directa al cesto del baño de P1</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• Al ponerse el pijama, la ropa usada viaja directo al cesto del baño de arriba. Suelo limpio.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card" data-id="n3">
-          <div class="task-header">
-            <input type="checkbox" data-daily="n3">
-            <div class="task-content">
-              <div class="task-title">Cocina cerrada: Fregadero despejado y lavavajillas ON</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• Filosofía nórdica: Despertarse sin cacharros en la pila. Lavavajillas en marcha y encimera limpia.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card" data-id="n4">
-          <div class="task-header">
-            <input type="checkbox" data-daily="n4">
-            <div class="task-content">
-              <div class="task-title">Basuras y reciclaje: bajar bolsas al exterior</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• Sacar la bolsa de basura y cartón/plásticos para que los cubos amanezcan vacíos.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-
-        <div class="task-card" data-id="n5">
-          <div class="task-header">
-            <input type="checkbox" data-daily="n5">
-            <div class="task-content">
-              <div class="task-title">Escalera despejada: Ningún objeto pernocta en peldaños</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide">
-                  <p>• En la última subida a descansar, cada uno sube lo suyo del descansillo o peldaños y lo devuelve a su planta.</p>
-                </div>
-              </details>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 2: ZONAS POR ALTURA -->
-    <section id="tab-zonas" class="tab-content">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Foco Mensual por Alturas</div>
-          <span class="badge" id="zone-status-badge">Semana detectada</span>
-        </div>
-        
-        <select id="zone-selector" onchange="renderZoneTasks()">
-          <option value="z1">🟡 Semana 1: Zona 1 – Escalera, Entrada y Porche</option>
-          <option value="z2">🟠 Semana 2: Zona 2 – PB Convivencia, Mueblo y Cocina</option>
-          <option value="z3">🟣 Semana 3: Zona 3 – P1 Niños y Baño familiar</option>
-          <option value="z4">🔵 Semana 4: Zona 4 – P2 Dormitorio y Despacho</option>
-          <option value="z5">🟢 Semana 5: Zona 5 – Sótano y Exteriores</option>
-        </select>
-
-        <div id="zone-task-list"></div>
-      </div>
-    </section>
-
-    <!-- TAB 3: MODO EMPUJÓN -->
-    <section id="tab-empujon" class="tab-content">
-      <div class="card empujon-box">
-        <h2 style="font-size: 1.2rem; font-weight: 800; color: var(--text);">Micro-Acción Inmediata</h2>
-        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">
-          Rompe la inercia con una sola acción concreta y cronómetro visual.
-        </p>
-
-        <div id="action-prompt" class="mission-box">
-          Pulsa un botón para recibir tu micro-misión de hoy
-        </div>
-
-        <div class="timer" id="timer">15:00</div>
-
-        <div class="btn-row">
-          <button class="btn btn-terracota" onclick="startRandomTask(15)">🎯 Foco 15 min (19:00 h)</button>
-          <button class="btn btn-mustard" onclick="startRandomTask(5)">⚡ Rescate 5 min</button>
-          <button class="btn btn-ghost" onclick="toggleTimer()" id="btn-play-pause">Pausar</button>
-          <button class="btn btn-ghost" onclick="resetTimer()">Reiniciar</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 4: SEGUIMIENTO & PROGRESO -->
-    <section id="tab-progreso" class="tab-content">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">Termómetro del Hogar</div>
-          <span class="badge" id="time-badge">En tiempo real</span>
-        </div>
-
-        <div id="status-alert-box" class="status-alert good" style="margin-bottom: 1.25rem;">
+        <div id="status-alert-box" class="status-alert good">
           <span id="status-icon">✨</span>
-          <span id="status-msg">Cargando estado...</span>
+          <span id="status-msg">Cargando ritmo del día...</span>
         </div>
 
         <div class="metric-grid">
@@ -714,49 +356,151 @@
           </div>
         </div>
 
-        <div style="font-size: 0.85rem; font-weight: 700; margin-top: 0.5rem; display: flex; justify-content: space-between;">
-          <span>Cumplimiento Diario</span>
+        <div style="font-size: 0.78rem; font-weight: 700; display: flex; justify-content: space-between; margin-top: 4px;">
+          <span>Cumplimiento del Día</span>
           <span id="daily-percent">0%</span>
         </div>
         <div class="progress-bar-container">
           <div class="progress-bar-fill" id="daily-bar" style="width: 0%;"></div>
         </div>
+      </div>
 
-        <div style="font-size: 0.85rem; font-weight: 700; margin-top: 1rem; display: flex; justify-content: space-between;">
-          <span>Zona Activa de la Semana</span>
-          <span id="zone-percent">0%</span>
+      <!-- 2. ZONA ACTIVA DEL MES (Integrada para evitar Out of Sight) -->
+      <div class="card" id="zone-active-card" style="border-top: 4px solid var(--accent-terracota);">
+        <div class="card-header">
+          <div>
+            <div class="card-title" id="active-zone-title">Foco de la Semana: Zona Activa</div>
+            <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">Micro-foco de 15 min al día (4 alturas)</p>
+          </div>
+          <span class="badge" id="zone-progress-badge">0/5</span>
         </div>
-        <div class="progress-bar-container">
+
+        <div class="progress-bar-container" style="margin-bottom: 1rem;">
           <div class="progress-bar-fill" id="zone-bar" style="width: 0%; background: var(--accent-terracota);"></div>
         </div>
-        <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: -6px;" id="zone-counter-text">
-          0 tareas completadas en esta rotación
+
+        <div id="active-zone-tasks-list"></div>
+
+        <!-- Añadir tarea a la zona -->
+        <div class="add-task-row">
+          <input type="text" id="input-new-zone-task" class="add-task-input" placeholder="+ Añadir tarea a esta zona...">
+          <button class="btn btn-sm btn-terracota" onclick="addNewZoneTask()">Añadir</button>
+        </div>
+      </div>
+
+      <!-- 3. RITMO SEMANAL: SÁBANAS Y TOALLAS -->
+      <div class="card" style="border-left: 4px solid var(--accent-indigo);">
+        <div class="card-header">
+          <div class="card-title">🧺 Ritmo Semanal (Blancos & Textiles)</div>
+          <span class="badge" id="textiles-badge" style="color: var(--accent-indigo); background: #eef2ff; border-color: #c7d2fe;">Textiles</span>
+        </div>
+        <div id="weekly-textiles-list"></div>
+        <div class="add-task-row">
+          <input type="text" id="input-new-textile-task" class="add-task-input" placeholder="+ Añadir tarea semanal...">
+          <button class="btn btn-sm btn-mustard" onclick="addNewTextileTask()">Añadir</button>
+        </div>
+      </div>
+
+      <!-- 4. RUTINAS DIARIAS -->
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">📋 Rutinas Diarias</div>
+        </div>
+
+        <div class="section-title" style="color: var(--accent-mustard);">
+          <span>🌅 Mañana (Arranque ágil)</span>
+        </div>
+        <div id="dailies-morning-list"></div>
+
+        <div class="section-title" style="color: var(--accent-terracota);">
+          <span>☀️ Mediodía (Cocina & Colada)</span>
+        </div>
+        <div id="dailies-noon-list"></div>
+
+        <div class="section-title" style="color: var(--accent-eucalyptus);">
+          <span>🤝 Tarde (Relevo 17:00 – 19:00 h)</span>
+        </div>
+        <div id="dailies-afternoon-list"></div>
+
+        <div class="section-title" style="color: var(--accent-slate-blue);">
+          <span>🌙 Noche («Casa a dormir»)</span>
+        </div>
+        <div id="dailies-night-list"></div>
+
+        <!-- Añadir tarea diaria rápida -->
+        <div style="margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.85rem;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Añadir rutina diaria personalizada:</div>
+          <div class="add-task-row">
+            <select id="select-daily-period" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-dark); font-size: 0.78rem;">
+              <option value="morning">🌅 Mañana</option>
+              <option value="noon">☀️ Mediodía</option>
+              <option value="afternoon">🤝 Tarde</option>
+              <option value="night">🌙 Noche</option>
+            </select>
+            <input type="text" id="input-new-daily-task" class="add-task-input" placeholder="Nombre de la nueva tarea...">
+            <button class="btn btn-sm btn-terracota" onclick="addNewDailyTask()">Añadir</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: TEMPORADA (ESTACIONALES) -->
+    <section id="tab-temporada" class="tab-content">
+      <div class="card" style="border-top: 4px solid var(--accent-eucalyptus);">
+        <div class="card-header">
+          <div>
+            <div class="card-title">🍂 Tareas de Temporada & Mantenimiento Largo</div>
+            <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">Cortinas, fundas, filtros y cambios de armario</p>
+          </div>
+        </div>
+
+        <div id="season-tasks-list"></div>
+
+        <div class="add-task-row">
+          <input type="text" id="input-new-season-task" class="add-task-input" placeholder="+ Añadir tarea de temporada...">
+          <button class="btn btn-sm" onclick="addNewSeasonTask()">Añadir</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: MODO EMPUJÓN -->
+    <section id="tab-empujon" class="tab-content">
+      <div class="card empujon-box">
+        <h2 style="font-size: 1.2rem; font-weight: 800;">Micro-Acción Inmediata</h2>
+        <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 4px;">
+          Rompe la inercia con una sola acción concreta y cronómetro visual.
         </p>
 
-        <div style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
-          <div style="font-size: 0.85rem; font-weight: 800; color: var(--text);">Historial de Constancia (Última semana)</div>
-          <div class="calendar-row" id="calendar-days-row"></div>
+        <div id="action-prompt" class="mission-box">
+          Pulsa un botón para recibir tu micro-misión de hoy
+        </div>
+
+        <div class="timer" id="timer">15:00</div>
+
+        <div class="btn-row">
+          <button class="btn btn-terracota" onclick="startRandomTask(15)">🎯 Foco 15 min</button>
+          <button class="btn btn-mustard" onclick="startRandomTask(5)">⚡ Rescate 5 min</button>
+          <button class="btn btn-ghost" onclick="toggleTimer()" id="btn-play-pause">Pausar</button>
+          <button class="btn btn-ghost" onclick="resetTimer()">Reiniciar</button>
         </div>
       </div>
     </section>
   </main>
 
   <nav>
-    <button class="active" onclick="switchTab('tab-diarias', this)">
-      <span>📋</span><span>Diarias</span>
+    <button class="active" onclick="switchTab('tab-dashboard', this)">
+      <span>🏠</span><span>Dashboard</span>
     </button>
-    <button onclick="switchTab('tab-zonas', this)">
-      <span>🏢</span><span>Zonas</span>
+    <button onclick="switchTab('tab-temporada', this)">
+      <span>🍂</span><span>Temporada</span>
     </button>
     <button onclick="switchTab('tab-empujon', this)">
       <span>⚡</span><span>Empujón</span>
     </button>
-    <button onclick="switchTab('tab-progreso', this)">
-      <span>📊</span><span>Progreso</span>
-    </button>
   </nav>
 
   <script>
+    // Audio sintetizado
     function playPopSound() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -794,114 +538,135 @@
       const ctx = canvas.getContext('2d');
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-
       const particles = [];
       const colors = ['#d96b43', '#d99b26', '#2a8370', '#3b7a99', '#6366f1'];
-
-      for (let i = 0; i < 60; i++) {
+      for (let i = 0; i < 50; i++) {
         particles.push({
-          x: canvas.width / 2,
-          y: canvas.height / 2,
-          r: Math.random() * 6 + 4,
-          dx: (Math.random() - 0.5) * 10,
-          dy: (Math.random() - 0.7) * 12,
+          x: canvas.width / 2, y: canvas.height / 2, r: Math.random() * 6 + 4,
+          dx: (Math.random() - 0.5) * 10, dy: (Math.random() - 0.7) * 12,
           color: colors[Math.floor(Math.random() * colors.length)],
-          tilt: Math.random() * 10,
-          tiltAngle: 0,
-          tiltAngleInc: Math.random() * 0.08 + 0.04
+          tilt: Math.random() * 10, tiltAngle: 0, tiltAngleInc: Math.random() * 0.08 + 0.04
         });
       }
-
-      let animationFrames = 0;
+      let frames = 0;
       function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         particles.forEach(p => {
-          p.x += p.dx;
-          p.y += p.dy;
-          p.dy += 0.25;
-          p.tiltAngle += p.tiltAngleInc;
-          p.tilt = Math.sin(p.tiltAngle) * 12;
-
-          ctx.beginPath();
-          ctx.lineWidth = p.r;
-          ctx.strokeStyle = p.color;
-          ctx.moveTo(p.x + p.tilt + p.r / 2, p.y);
-          ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
+          p.x += p.dx; p.y += p.dy; p.dy += 0.25;
+          p.tiltAngle += p.tiltAngleInc; p.tilt = Math.sin(p.tiltAngle) * 12;
+          ctx.beginPath(); ctx.lineWidth = p.r; ctx.strokeStyle = p.color;
+          ctx.moveTo(p.x + p.tilt + p.r / 2, p.y); ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 2);
           ctx.stroke();
         });
-
-        animationFrames++;
-        if (animationFrames < 90) requestAnimationFrame(animate);
+        frames++;
+        if (frames < 90) requestAnimationFrame(animate);
         else ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
       animate();
     }
 
-    const zoneData = {
-      z1: {
-        title: "Zona 1: Escalera, Entrada y Porche",
-        color: "var(--color-z1)",
-        tasks: [
-          { title: "Despejar peldaños a cero y vaciar cestos de descansillo", guide: "Recorre los tramos desde el sótano hasta la planta 2. Devuelve cada objeto varado a la planta donde pertenece." },
-          { title: "Aspirar o barrer tramos de escalera de arriba abajo", guide: "Empieza siempre por el piso superior hacia abajo. Un tramo al día es suficiente." },
-          { title: "Organizar calzado y abrigos en el recibidor", guide: "Quita del perchero lo que no se use a diario y alinea los zapatos." },
-          { title: "Barrer el porche delantero y sacudir felpudo", guide: "Sacude el felpudo fuera y pasa un barrido rápido al porche." },
-          { title: "Limpiar huellas de la barandilla y pomo exterior", guide: "Pasa una bayeta con desinfectante suave por todo el pasamanos y pomos." }
+    // Datos maestros iniciales
+    const defaultData = {
+      dailies: {
+        morning: [
+          { id: 'm1', title: 'Planta 1 y 2: Camas estiradas y ventilación rápida (5 min)', guide: 'Abrir ventanas, estirar edredones y ahuecar almohadas para renovar el aire.' },
+          { id: 'm2', title: 'Repaso exprés baños: lavabo e inodoro (P1 familiar y Aseo PB)', guide: 'Bayeta rápida a gotas de grifería y asiento de inodoro.' },
+          { id: 'm3', title: 'Ruta colada: cesto de P1 directo a lavadora en sótano', guide: 'Bajar con el cesto en el primer viaje matutino.' },
+          { id: 'm4', title: 'Planta Baja: Vaciar lavavajillas para el día', guide: 'Dejarlo libre para que no se acumule nada en la pila.' }
+        ],
+        noon: [
+          { id: 'd1', title: 'Cocina post-comida (X-J-V niños / L-M adultos)', guide: 'Mesa despejada, platos dentro del lavavajillas y bayeta rápida.' },
+          { id: 'd2', title: 'Sótano: Poner lavadora del día y tender/secar', guide: 'Carga diaria para mantener la montaña de ropa bajo control.' }
+        ],
+        afternoon: [
+          { id: 't1', title: '17:00 h • Fin de jornada y puesta en común rápida', guide: 'Cierre del despacho en P2 y reparto de cenas/tareas peques.' },
+          { id: 't2', title: '17:30 h • Puesta en marcha de la cena (anticipación)', guide: 'Sacar ingredientes y adelantar para cenar sin estrés.' },
+          { id: 't3', title: '19:00 h • Foco 15 min en equipo (Zona activa)', guide: '15 minutos juntos en la planta que toque según la semana.' }
+        ],
+        night: [
+          { id: 'n1', title: 'Misión peques: Despejar escritorios en Planta 1', guide: 'Mesa limpia para empezar el día siguiente sin caos visual.' },
+          { id: 'n2', title: 'Ropa sucia peques: directa al cesto del baño de P1', guide: 'Cero ropa usada en el suelo al ponerse el pijama.' },
+          { id: 'n3', title: 'Cocina cerrada: Fregadero despejado y lavavajillas ON', guide: 'Filosofía nórdica: levantarse sin nada sucio en la pila.' },
+          { id: 'n4', title: 'Basuras y reciclaje: bajar bolsas al exterior', guide: 'Cubos vacíos para arrancar el día.' },
+          { id: 'n5', title: 'Escalera despejada: Ningún objeto pernocta en peldaños', guide: 'Cada persona sube lo suyo a su planta al ir a dormir.' }
         ]
       },
-      z2: {
-        title: "Zona 2: PB Convivencia, Mueblo y Cocina",
-        color: "var(--color-z2)",
-        tasks: [
-          { title: "Superficie del «mueblo»: despejarlo a cero", guide: "Retira absolutamente todo lo acumulado sobre el aparador. Clasifica y limpia la madera." },
-          { title: "Mesita frente al sofá: despejar y limpiar", guide: "Quita vasos, mandos y trastos. Deja solo lo esencial." },
-          { title: "Quitar el polvo del salón (estantes, mueble TV)", guide: "Usa plumero o microfibra ligeramente húmeda sin mover adornos pesados." },
-          { title: "Nevera: limpiar y ordenar una sola balda o cajón", guide: "Saca los botes de una sola balda, tira lo caducado y limpia en 5 minutos." },
-          { title: "Limpieza exprés de microondas y puerta del horno", guide: "Vaso con agua y limón 2 min al microondas y bayeta. Limpiacristales al horno." },
-          { title: "Aspirar base y cojines del sofá", guide: "Retira cojines superiores, aspira migas o polvo acumulado y recoloca." }
-        ]
+      textiles: [
+        { id: 'tex_toallas', title: 'Cambio de toallas familiares (P1 y Aseo PB)', guide: 'Renovar toallas de manos y ducha; directas al sótano.' },
+        { id: 'tex_sabanas', title: 'Cambio de sábanas en dormitorios (P1 y P2)', guide: 'Cambio de sábanas y fundas de almohada.' }
+      ],
+      zones: {
+        z1: {
+          title: "Semana 1: Escalera, Entrada y Porche",
+          tasks: [
+            { id: 'z1_0', title: 'Despejar peldaños a cero y vaciar cestos de descansillo', guide: 'Devolver cada cosa varada a su planta correspondiente.' },
+            { id: 'z1_1', title: 'Aspirar o barrer tramos de escalera de arriba abajo', guide: 'Desde la P2 hasta el sótano.' },
+            { id: 'z1_2', title: 'Organizar calzado y abrigos en el recibidor', guide: 'Despejar perchas y alinear zapatos.' },
+            { id: 'z1_3', title: 'Barrer el porche delantero y sacudir felpudo', guide: 'Frena el 70% de la suciedad que entra.' },
+            { id: 'z1_4', title: 'Limpiar huellas de barandilla y pomo exterior', guide: 'Bayeta suave por todo el pasamanos.' }
+          ]
+        },
+        z2: {
+          title: "Semana 2: PB Convivencia, «Mueblo» y Cocina",
+          tasks: [
+            { id: 'z2_0', title: 'Superficie del «mueblo»: despejarlo a cero', guide: 'Retirar trastos, clasificar y pasar bayeta a la madera.' },
+            { id: 'z2_1', title: 'Mesita frente al sofá: despejar y limpiar', guide: 'Dejar solo lo esencial (mandos/libro).' },
+            { id: 'z2_2', title: 'Quitar el polvo del salón (estantes y mueble TV)', guide: 'Plumero o microfibra húmeda.' },
+            { id: 'z2_3', title: 'Nevera: limpiar y ordenar una sola balda o cajón', guide: '5 minutos: tirar caducados y pasar bayeta.' },
+            { id: 'z2_4', title: 'Limpieza exprés de microondas y puerta del horno', guide: 'Agua con limón al microondas y bayeta.' },
+            { id: 'z2_5', title: 'Aspirar base y cojines del sofá', guide: 'Quitar cojines y aspirar migas del fondo.' }
+          ]
+        },
+        z3: {
+          title: "Semana 3: P1 Niños y Baño familiar",
+          tasks: [
+            { id: 'z3_0', title: 'Baño familiar: desinfección a fondo de bañera/ducha', guide: 'Antical a grifería y mampara.' },
+            { id: 'z3_1', title: 'Caza de juguetes: 10 min clasificando cajas temáticas', guide: 'Piezas a su contenedor correspondiente.' },
+            { id: 'z3_2', title: 'Cajones infantiles: cribar 5 prendas pequeñas', guide: 'Revisar un solo cajón y descartar lo pequeño.' },
+            { id: 'z3_3', title: 'Aspirar a fondo el suelo del cuarto de juegos', guide: 'Mover cajas y aspirar esquinas.' },
+            { id: 'z3_4', title: 'Revisión de mochilas y material escolar', guide: 'Vaciar papeles viejos y afilar lápices.' }
+          ]
+        },
+        z4: {
+          title: "Semana 4: P2 Dormitorio y Despacho",
+          tasks: [
+            { id: 'z4_0', title: 'Escritorio de estudio: despejar papeles sueltos y cables', guide: 'Clasificar apuntes y archivar.' },
+            { id: 'z4_1', title: 'Mesitas de noche: retirar objetos intrusos y bayeta', guide: 'Dejar lámpara y lectura activa.' },
+            { id: 'z4_2', title: 'Armario principal: ordenar una balda o perchas', guide: 'Alinear perchas y doblar jerséis caídos.' },
+            { id: 'z4_3', title: 'Aspirar suelo y rodapiés de la zona de estudio', guide: 'Mover silla y limpiar pelusas acumuladas.' },
+            { id: 'z4_4', title: 'Ventilación profunda y sacudir textiles', guide: 'Ventilar 15 min y sacudir mantas.' }
+          ]
+        },
+        z5: {
+          title: "Semana 5: Sótano y Exteriores",
+          tasks: [
+            { id: 'z5_0', title: 'Despensa: revisar caducidades de una balda y alinear', guide: 'Lo que caduca antes pasa al frente.' },
+            { id: 'z5_1', title: 'Zona colada: limpiar filtro de lavadora y cajetín', guide: 'Lavar cajón del jabón bajo el grifo.' },
+            { id: 'z5_2', title: 'Deshacer o clasificar una caja acumulada en garaje', guide: 'Decidir qué se queda y qué se tira.' },
+            { id: 'z5_3', title: 'Jardín: barrer hojas o dar un repaso de riego', guide: 'Cuidar el entorno exterior.' },
+            { id: 'z5_4', title: 'Plegar cartones y reciclaje acumulado', guide: 'Cajas listas para el contenedor azul.' }
+          ]
+        }
       },
-      z3: {
-        title: "Zona 3: P1 Niños y Baño familiar",
-        color: "var(--color-z3)",
-        tasks: [
-          { title: "Baño familiar: desinfección a fondo de bañera/ducha", guide: "Aplica antical a grifería y mampara, deja actuar 5 minutos y aclara." },
-          { title: "Caza de juguetes: 10 min clasificando cajas temáticas", guide: "Con los peques: una caja para muñecos, otra para construcciones/piezas." },
-          { title: "Cajones infantiles: cribar 5 prendas pequeñas o calcetines", guide: "Revisar un solo cajón de ropa con ellos y apartar lo que ya no sirva." },
-          { title: "Aspirar a fondo el suelo del cuarto de juegos", guide: "Despejar cajas al sofá o cama, aspirar rodapiés y esquinas." },
-          { title: "Revisión de mochilas y material escolar", guide: "Vaciar papeles viejos del fondo de las mochilas y afilar lápices." }
-        ]
-      },
-      z4: {
-        title: "Zona 4: P2 Dormitorio y Despacho",
-        color: "var(--color-z4)",
-        tasks: [
-          { title: "Escritorio de estudio: despejar papeles sueltos y cables", guide: "Clasifica apuntes y papeles: lo que sirva a su carpeta, lo desechable al contenedor." },
-          { title: "Mesitas de noche: retirar objetos intrusos y bayeta", guide: "Retira vasos de agua, tickets o libros ya leídos." },
-          { title: "Armario principal: ordenar una balda o perchas", guide: "Revisa una balda: doblar prendas caídas o alinear perchas." },
-          { title: "Aspirar suelo y rodapiés de la zona de estudio", guide: "Mueve la silla de trabajo, aspira pelusas acumuladas bajo la mesa." },
-          { title: "Ventilación profunda y sacudir textiles", guide: "Ventilar 15 min, sacudir mantas o cojines por la ventana o terraza." }
-        ]
-      },
-      z5: {
-        title: "Zona 5: Sótano y Exteriores",
-        color: "var(--color-z5)",
-        tasks: [
-          { title: "Despensa: revisar caducidades de una balda y alinear", guide: "Comprueba latas y conservas de una balda. Pon lo que caduca antes delante." },
-          { title: "Zona colada: limpiar filtro de lavadora y bandeja de jabón", guide: "Extrae el cajón del detergente, lávalo bajo el grifo y limpia la goma." },
-          { title: "Deshacer o clasificar una caja acumulada en el garaje", guide: "Toma solo una caja con trastos y decide qué se queda y qué se tira." },
-          { title: "Jardín: barrer hojas o dar un repaso de riego", guide: "Repaso ligero de hojas secas o regar macetas." },
-          { title: "Plegar y desechar cartones/reciclaje acumulado", guide: "Plegar cajas de paquetes acumuladas en el garaje y dejarlas listas para reciclar." }
-        ]
-      }
+      season: [
+        { id: 's1', title: 'Lavar cortinas del salón y estancias comunes', guide: 'Ciclo delicado y colgar húmedas para evitar plancha.' },
+        { id: 's2', title: 'Lavar fundas de sofá y cojines decorativos', guide: 'Revisar etiquetas de lavado y secar al aire.' },
+        { id: 's3', title: 'Limpieza de filtros de aire acondicionado / calefacción', guide: 'Aspirar o enjuagar filtros bajo el grifo.' },
+        { id: 's4', title: 'Cambio de armario de temporada (adultos y niños)', guide: 'Cajas de almacenamiento y retirada de ropa de otra estación.' },
+        { id: 's5', title: 'Revisión y limpieza a fondo de ventanas y cristales', guide: 'Elegir un día nublado para evitar marcas de sol.' }
+      ]
     };
+
+    let appData = JSON.parse(localStorage.getItem('homeflow_app_data')) || defaultData;
+    let checkedState = JSON.parse(localStorage.getItem('homeflow_checked_state')) || {};
+
+    const todayStr = new Date().toISOString().slice(0, 10);
 
     function switchTab(tabId, btn) {
       document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
       document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
       document.getElementById(tabId).classList.add('active');
       btn.classList.add('active');
-      if (tabId === 'tab-progreso') updateProgressMetrics();
     }
 
     function calculateCurrentWeek() {
@@ -909,16 +674,10 @@
       const dayOfMonth = today.getDate();
       let weekNum = Math.ceil(dayOfMonth / 7);
       if (weekNum > 5) weekNum = 5;
-
       const zoneKey = 'z' + weekNum;
-      const selector = document.getElementById('zone-selector');
-      if (selector) selector.value = zoneKey;
-
+      
       const weekLabel = document.getElementById('current-week-label');
       if (weekLabel) weekLabel.innerText = `Semana ${weekNum} activa`;
-
-      const badge = document.getElementById('zone-status-badge');
-      if (badge) badge.innerText = `Zona ${weekNum} (Auto)`;
 
       const options = { weekday: 'long', day: 'numeric', month: 'short' };
       document.getElementById('today-date').innerText = today.toLocaleDateString('es-ES', options);
@@ -926,16 +685,18 @@
       return zoneKey;
     }
 
-    const todayStr = new Date().toISOString().slice(0, 10);
-    const dailyCheckboxes = document.querySelectorAll('input[data-daily]');
-
-    async function syncToFirebase(type, id, value) {
+    // Sincronización a Firestore
+    async function syncToFirebase() {
       if (!window.db) return;
       try {
         const docRef = window.firestoreDoc(window.db, "hogar", todayStr);
-        await window.firestoreSetDoc(docRef, { [type]: { [id]: value } }, { merge: true });
-      } catch (err) {
-        console.error("Error Firebase:", err);
+        await window.firestoreSetDoc(docRef, {
+          checkedState: checkedState,
+          appData: appData,
+          updatedAt: new Date().toISOString()
+        }, { merge: true });
+      } catch (e) {
+        console.error("Error sincronizando", e);
       }
     }
 
@@ -945,179 +706,185 @@
         window.firestoreOnSnapshot(docRef, (docSnap) => {
           if (docSnap.exists()) {
             const data = docSnap.data();
-            if (data.dailies) {
-              dailyCheckboxes.forEach(cb => {
-                if (data.dailies[cb.dataset.daily] !== undefined) {
-                  const remoteVal = data.dailies[cb.dataset.daily];
-                  if (cb.checked !== remoteVal) {
-                    cb.checked = remoteVal;
-                    toggleCardDone(cb);
-                    localStorage.setItem('daily_' + cb.dataset.daily, cb.checked);
-                  }
-                }
-              });
-              updateDailyCount(false);
-              updateFocoTask();
+            if (data.appData) {
+              appData = data.appData;
+              localStorage.setItem('homeflow_app_data', JSON.stringify(appData));
             }
-            if (data.zones) {
-              Object.entries(data.zones).forEach(([key, val]) => {
-                localStorage.setItem('zone_' + key, val);
-              });
-              renderZoneTasks(false);
+            if (data.checkedState) {
+              checkedState = data.checkedState;
+              localStorage.setItem('homeflow_checked_state', JSON.stringify(checkedState));
             }
+            renderAll();
           }
         });
       } catch (e) {
-        console.warn("Modo offline o sin conexión en vivo");
+        console.warn("Offline");
       }
     });
 
-    function toggleCardDone(cb) {
-      const card = cb.closest('.task-card');
-      if (card) {
-        if (cb.checked) card.classList.add('done');
-        else card.classList.remove('done');
+    function toggleTask(id) {
+      playPopSound();
+      checkedState[id] = !checkedState[id];
+      localStorage.setItem('homeflow_checked_state', JSON.stringify(checkedState));
+      renderAll();
+      syncToFirebase();
+
+      const totalDailies = getTotalDailiesCount();
+      const doneDailies = getDoneDailiesCount();
+      if (doneDailies === totalDailies && totalDailies > 0) {
+        launchConfetti();
+        playBeep();
       }
     }
 
-    function loadDailyProgress() {
-      const savedDate = localStorage.getItem('daily_date');
-      if (savedDate !== todayStr) {
-        if (savedDate) {
-          const pastDone = Array.from(dailyCheckboxes).filter(cb => localStorage.getItem('daily_' + cb.dataset.daily) === 'true').length;
-          localStorage.setItem('history_' + savedDate, pastDone >= 7 ? 'good' : 'low');
-        }
-        localStorage.setItem('daily_date', todayStr);
-        dailyCheckboxes.forEach(cb => {
-          cb.checked = false;
-          localStorage.removeItem('daily_' + cb.dataset.daily);
-          toggleCardDone(cb);
-        });
-      } else {
-        dailyCheckboxes.forEach(cb => {
-          const val = localStorage.getItem('daily_' + cb.dataset.daily);
-          cb.checked = (val === 'true');
-          toggleCardDone(cb);
-        });
+    function deleteTask(type, id, subKey = null) {
+      if (!confirm("¿Eliminar esta tarea de la lista?")) return;
+      if (type === 'daily') {
+        appData.dailies[subKey] = appData.dailies[subKey].filter(t => t.id !== id);
+      } else if (type === 'zone') {
+        appData.zones[subKey].tasks = appData.zones[subKey].tasks.filter(t => t.id !== id);
+      } else if (type === 'textiles') {
+        appData.textiles = appData.textiles.filter(t => t.id !== id);
+      } else if (type === 'season') {
+        appData.season = appData.season.filter(t => t.id !== id);
       }
-      updateDailyCount(false);
-      updateFocoTask();
+      delete checkedState[id];
+      saveAndSync();
     }
 
-    dailyCheckboxes.forEach(cb => {
-      cb.addEventListener('change', () => {
-        playPopSound();
-        localStorage.setItem('daily_' + cb.dataset.daily, cb.checked);
-        toggleCardDone(cb);
-        updateDailyCount(true);
-        updateFocoTask();
-        syncToFirebase('dailies', cb.dataset.daily, cb.checked);
-
-        const allDone = Array.from(dailyCheckboxes).every(c => c.checked);
-        if (allDone) {
-          launchConfetti();
-          playBeep();
-        }
-      });
-    });
-
-    function updateDailyCount(triggerMetrics = true) {
-      const total = dailyCheckboxes.length;
-      const checked = Array.from(dailyCheckboxes).filter(cb => cb.checked).length;
-      document.getElementById('daily-progress').innerText = `${checked}/${total}`;
-      if (triggerMetrics) updateProgressMetrics();
+    function saveAndSync() {
+      localStorage.setItem('homeflow_app_data', JSON.stringify(appData));
+      localStorage.setItem('homeflow_checked_state', JSON.stringify(checkedState));
+      renderAll();
+      syncToFirebase();
     }
 
-    function updateFocoTask() {
-      const pending = Array.from(dailyCheckboxes).find(cb => !cb.checked);
-      const focoBox = document.getElementById('foco-container');
-      const focoTitle = document.getElementById('foco-task-title');
-      if (pending) {
-        const titleText = pending.closest('.task-card').querySelector('.task-title').innerText;
-        focoTitle.innerText = titleText;
-        focoBox.style.display = 'block';
-      } else {
-        focoTitle.innerText = "🎉 ¡Todas las tareas diarias completadas!";
-        focoBox.style.display = 'block';
-      }
+    // Funciones para añadir tareas
+    function addNewDailyTask() {
+      const input = document.getElementById('input-new-daily-task');
+      const period = document.getElementById('select-daily-period').value;
+      const title = input.value.trim();
+      if (!title) return;
+      const newId = 'cust_daily_' + Date.now();
+      appData.dailies[period].push({ id: newId, title: title, guide: 'Tarea personalizada añadida.' });
+      input.value = '';
+      saveAndSync();
     }
 
-    function completeFocoTask() {
-      const pending = Array.from(dailyCheckboxes).find(cb => !cb.checked);
-      if (pending) {
-        pending.checked = true;
-        pending.dispatchEvent(new Event('change'));
-      }
+    function addNewZoneTask() {
+      const input = document.getElementById('input-new-zone-task');
+      const title = input.value.trim();
+      if (!title) return;
+      const zoneKey = calculateCurrentWeek();
+      const newId = 'cust_zone_' + Date.now();
+      appData.zones[zoneKey].tasks.push({ id: newId, title: title, guide: 'Micro-tarea añadida.' });
+      input.value = '';
+      saveAndSync();
     }
 
-    function renderZoneTasks(triggerMetrics = true) {
-      const zoneKey = document.getElementById('zone-selector').value;
-      const zone = zoneData[zoneKey];
-      const container = document.getElementById('zone-task-list');
-      
-      container.innerHTML = zone.tasks.map((task, idx) => `
-        <div class="task-card" style="border-left: 4px solid ${zone.color};">
+    function addNewTextileTask() {
+      const input = document.getElementById('input-new-textile-task');
+      const title = input.value.trim();
+      if (!title) return;
+      const newId = 'cust_tex_' + Date.now();
+      appData.textiles.push({ id: newId, title: title, guide: 'Tarea textil añadida.' });
+      input.value = '';
+      saveAndSync();
+    }
+
+    function addNewSeasonTask() {
+      const input = document.getElementById('input-new-season-task');
+      const title = input.value.trim();
+      if (!title) return;
+      const newId = 'cust_season_' + Date.now();
+      appData.season.push({ id: newId, title: title, guide: 'Mantenimiento de temporada añadido.' });
+      input.value = '';
+      saveAndSync();
+    }
+
+    function renderTaskHTML(task, deleteType, subKey) {
+      const isChecked = !!checkedState[task.id];
+      return `
+        <div class="task-card ${isChecked ? 'done' : ''}">
           <div class="task-header">
-            <input type="checkbox" data-zone="${zoneKey}_${idx}" onchange="toggleZoneTask(this)">
+            <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleTask('${task.id}')">
             <div class="task-content">
               <div class="task-title">${task.title}</div>
-              <details>
-                <summary>Detalles / Guía</summary>
-                <div class="task-guide"><p>${task.guide}</p></div>
-              </details>
+              ${task.guide ? `<details><summary>Detalles / Guía</summary><div class="task-guide"><p>${task.guide}</p></div></details>` : ''}
             </div>
+            <button class="btn-delete-task" title="Eliminar" onclick="deleteTask('${deleteType}', '${task.id}', '${subKey}')">✕</button>
           </div>
         </div>
-      `).join('');
+      `;
+    }
 
-      container.querySelectorAll('input[data-zone]').forEach(cb => {
-        const val = localStorage.getItem('zone_' + cb.dataset.zone);
-        cb.checked = (val === 'true');
-        toggleCardDone(cb);
+    function getTotalDailiesCount() {
+      return Object.values(appData.dailies).reduce((acc, list) => acc + list.length, 0);
+    }
+
+    function getDoneDailiesCount() {
+      let count = 0;
+      Object.values(appData.dailies).forEach(list => {
+        list.forEach(t => { if (checkedState[t.id]) count++; });
       });
-      if (triggerMetrics) updateProgressMetrics();
+      return count;
     }
 
-    function toggleZoneTask(cb) {
-      playPopSound();
-      localStorage.setItem('zone_' + cb.dataset.zone, cb.checked);
-      toggleCardDone(cb);
-      syncToFirebase('zones', cb.dataset.zone, cb.checked);
-      updateProgressMetrics();
+    function renderAll() {
+      const zoneKey = calculateCurrentWeek();
+      const activeZone = appData.zones[zoneKey];
+
+      // Cabecera de la zona activa
+      document.getElementById('active-zone-title').innerText = activeZone.title;
+
+      // Render Zona activa integrada
+      const zoneContainer = document.getElementById('active-zone-tasks-list');
+      zoneContainer.innerHTML = activeZone.tasks.map(t => renderTaskHTML(t, 'zone', zoneKey)).join('');
+
+      let doneZoneCount = activeZone.tasks.filter(t => checkedState[t.id]).length;
+      document.getElementById('zone-progress-badge').innerText = `${doneZoneCount}/${activeZone.tasks.length}`;
+      const zonePct = activeZone.tasks.length > 0 ? Math.round((doneZoneCount / activeZone.tasks.length) * 100) : 0;
+      document.getElementById('zone-bar').style.width = `${zonePct}%`;
+
+      // Render Ritmo Semanal (Textiles / Sábanas y Toallas)
+      const textilesContainer = document.getElementById('weekly-textiles-list');
+      textilesContainer.innerHTML = appData.textiles.map(t => renderTaskHTML(t, 'textiles', null)).join('');
+
+      // Render Diarias por franja
+      ['morning', 'noon', 'afternoon', 'night'].forEach(period => {
+        const el = document.getElementById(`dailies-${period}-list`);
+        el.innerHTML = appData.dailies[period].map(t => renderTaskHTML(t, 'daily', period)).join('');
+      });
+
+      // Render Temporada
+      const seasonContainer = document.getElementById('season-tasks-list');
+      seasonContainer.innerHTML = appData.season.map(t => renderTaskHTML(t, 'season', null)).join('');
+
+      // Métricas y termómetro integrado
+      updateMetrics();
     }
 
-    function updateProgressMetrics() {
-      const totalDaily = dailyCheckboxes.length;
-      const doneDaily = Array.from(dailyCheckboxes).filter(cb => cb.checked).length;
+    function updateMetrics() {
+      const totalDaily = getTotalDailiesCount();
+      const doneDaily = getDoneDailiesCount();
+
+      document.getElementById('daily-progress-badge').innerText = `${doneDaily}/${totalDaily}`;
 
       const now = new Date();
       const currentHour = now.getHours();
 
       let expectedDaily = 0;
-      if (currentHour >= 11) expectedDaily += 4;
-      if (currentHour >= 15) expectedDaily += 2;
-      if (currentHour >= 17) expectedDaily += 1;
-      if (currentHour >= 18) expectedDaily += 1;
-      if (currentHour >= 19) expectedDaily += 1;
-      if (currentHour >= 21) expectedDaily += 5;
+      if (currentHour >= 11) expectedDaily += appData.dailies.morning.length;
+      if (currentHour >= 15) expectedDaily += appData.dailies.noon.length;
+      if (currentHour >= 19) expectedDaily += appData.dailies.afternoon.length;
+      if (currentHour >= 21) expectedDaily += appData.dailies.night.length;
 
       document.getElementById('metric-done').innerText = doneDaily;
       document.getElementById('metric-expected').innerText = expectedDaily;
 
-      const dailyPct = Math.round((doneDaily / totalDaily) * 100);
+      const dailyPct = totalDaily > 0 ? Math.round((doneDaily / totalDaily) * 100) : 0;
       document.getElementById('daily-percent').innerText = `${dailyPct}%`;
       document.getElementById('daily-bar').style.width = `${dailyPct}%`;
-
-      const currentZoneKey = calculateCurrentWeek();
-      const zoneTasks = zoneData[currentZoneKey].tasks;
-      let doneZone = 0;
-      zoneTasks.forEach((_, idx) => {
-        if (localStorage.getItem(`zone_${currentZoneKey}_${idx}`) === 'true') doneZone++;
-      });
-      const zonePct = Math.round((doneZone / zoneTasks.length) * 100);
-      document.getElementById('zone-percent').innerText = `${zonePct}%`;
-      document.getElementById('zone-bar').style.width = `${zonePct}%`;
-      document.getElementById('zone-counter-text').innerText = `${doneZone} de ${zoneTasks.length} tareas completadas en esta rotación`;
 
       const alertBox = document.getElementById('status-alert-box');
       const icon = document.getElementById('status-icon');
@@ -1126,49 +893,18 @@
       if (doneDaily >= expectedDaily) {
         alertBox.className = 'status-alert good';
         icon.innerText = '✨';
-        msg.innerText = doneDaily === totalDaily 
-          ? '¡Día 100% completado! Toda la casa al día.' 
+        msg.innerText = (doneDaily === totalDaily && totalDaily > 0)
+          ? '¡Día 100% completado! Toda la casa al día.'
           : 'Vais al día o por delante del ritmo previsto para esta hora.';
       } else {
         alertBox.className = 'status-alert behind';
         icon.innerText = '⏳';
         const diff = expectedDaily - doneDaily;
-        msg.innerText = `Tenéis ${diff} ${diff === 1 ? 'tarea pendiente' : 'tareas pendientes'} según la hora actual. ¡Un empujón conjunto de 10 min y os ponéis al día!`;
-      }
-
-      renderMiniCalendar();
-    }
-
-    function renderMiniCalendar() {
-      const row = document.getElementById('calendar-days-row');
-      if (!row) return;
-      row.innerHTML = '';
-      const days = ['D', 'L', 'M', 'X', 'J', 'V', 'S'];
-      
-      for (let i = 6; i >= 0; i--) {
-        const d = new Date();
-        d.setDate(d.getDate() - i);
-        const dStr = d.toISOString().slice(0, 10);
-        const dayLetter = days[d.getDay()];
-        
-        const isToday = (i === 0);
-        let active = false;
-        if (isToday) {
-          active = (Array.from(dailyCheckboxes).filter(cb => cb.checked).length >= 7);
-        } else {
-          active = (localStorage.getItem('history_' + dStr) === 'good');
-        }
-
-        row.innerHTML += `
-          <div class="calendar-day" style="${isToday ? 'border-color: var(--accent-terracota); font-weight:800;' : ''}">
-            <div class="calendar-day-name">${dayLetter}</div>
-            <div class="calendar-day-dot ${active ? 'active' : ''}"></div>
-          </div>
-        `;
+        msg.innerText = `Tenéis ${diff} ${diff === 1 ? 'tarea pendiente' : 'tareas pendientes'} según la hora actual. ¡Un empujón de 5-10 min y al día!`;
       }
     }
 
-    // Temporizador manual para el Foco
+    // Temporizador
     let timerInterval = null;
     let secondsLeft = 900;
     let isRunning = false;
@@ -1176,8 +912,7 @@
     function updateTimerDisplay() {
       const m = Math.floor(secondsLeft / 60);
       const s = secondsLeft % 60;
-      document.getElementById('timer').innerText = 
-        `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      document.getElementById('timer').innerText = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
     }
 
     function startRandomTask(minutes) {
@@ -1185,10 +920,12 @@
       secondsLeft = minutes * 60;
       updateTimerDisplay();
 
-      const zoneKey = document.getElementById('zone-selector').value;
-      const tasks = zoneData[zoneKey].tasks;
-      const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
-      document.getElementById('action-prompt').innerText = randomTask.title;
+      const zoneKey = calculateCurrentWeek();
+      const tasks = appData.zones[zoneKey].tasks;
+      if (tasks.length > 0) {
+        const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
+        document.getElementById('action-prompt').innerText = randomTask.title;
+      }
 
       isRunning = true;
       document.getElementById('btn-play-pause').innerText = 'Pausar';
@@ -1237,10 +974,8 @@
       updateTimerDisplay();
     }
 
-    calculateCurrentWeek();
-    loadDailyProgress();
-    renderZoneTasks(false);
-    updateProgressMetrics();
+    // Arranque inicial
+    renderAll();
   </script>
 </body>
 </html>
