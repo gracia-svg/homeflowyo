@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organización del Hogar & Anti-Procrastinación</title>
+
+  <!-- SDKs de Firebase cargados por navegador -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // PEGA AQUÍ TUS CLAVES DE FIREBASE:
+  const firebaseConfig = {
+  apiKey: "AIzaSyBACZeoOJ80m9M1zqTSST1ZZt6525RBnmE",
+  authDomain: "homeflow-992f0.firebaseapp.com",
+  projectId: "homeflow-992f0",
+  storageBucket: "homeflow-992f0.firebasestorage.app",
+  messagingSenderId: "552797709232",
+  appId: "1:552797709232:web:18e591c40bc78111116c75"
+};
+
+    const app = initializeApp(firebaseConfig);
+    window.db = getFirestore(app);
+    window.firestoreDoc = doc;
+    window.firestoreGetDoc = getDoc;
+    window.firestoreSetDoc = setDoc;
+    
+    // Disparar carga de Firestore una vez inicializado
+    window.dispatchEvent(new Event('firebase-ready'));
+  </script>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --primary: #0f766e;
+      --primary-hover: #115e59;
+      --accent: #f59e0b;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: 75px; }
+
+    header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 1.25rem 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      text-align: center;
+    }
+    header h1 { font-size: 1.15rem; font-weight: 700; color: var(--primary); }
+    header p { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 0.6rem 0.5rem;
+      z-index: 30;
+    }
+    nav button {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      cursor: pointer;
+    }
+    nav button.active { color: var(--primary); }
+
+    main { max-width: 640px; margin: 0 auto; padding: 1.25rem 1rem; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .badge {
+      font-size: 0.7rem;
+      background: #ccfbf1;
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+    }
+
+    .task-group { margin-bottom: 1rem; }
+    .task-group-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 0.65rem 0.5rem;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.9rem;
+      line-height: 1.35;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    .task-item:hover { background-color: #f8fafc; }
+    .task-item:last-child { border-bottom: none; }
+    .task-item input[type="checkbox"] {
+      margin-top: 3px;
+      width: 17px;
+      height: 17px;
+      accent-color: var(--primary);
+      cursor: pointer;
+    }
+    .task-item.done span {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    .zone-select-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1rem;
+    }
+    select {
+      flex: 1;
+      padding: 0.6rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+      background: var(--card-bg);
+      color: var(--text);
+    }
+
+    .empujon-box {
+      text-align: center;
+      padding: 1.5rem 1rem;
+    }
+    .timer-display {
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      font-variant-numeric: tabular-nums;
+      margin: 1rem 0;
+    }
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    button.btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 0.75rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    button.btn:hover { background: var(--primary-hover); }
+    button.btn-rescue { background: var(--accent); }
+    button.btn-rescue:hover { background: #d97706; }
+    button.btn-outline {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .action-card {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #166534;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Planificación Vertical del Hogar</h1>
+    <p>Rutinas Diarias & Rotación por 4 Alturas</p>
+  </header>
+
+  <main>
+    <!-- TAB 1: RUTINAS DIARIAS -->
+    <section id="tab-diarias" class="tab-content active">
+      <div class="card">
+        <div class="card-title">
+          <span>Rutinas de Supervivencia</span>
+          <span class="badge" id="daily-progress">0/11</span>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">🌅 Mañana (Arranque ágil)</div>
+          <label class="task-item"><input type="checkbox" data-daily="m1"><span>Planta 1 y 2: Camas estiradas y ventilación rápida (5 min).</span></label>
+          <label class="task-item"><input type="checkbox" data-daily="m2"><span>Repaso exprés baños: bayeta a lavabo/grifo e inodoro (P1 y Aseo PB).</span></label>
+          <label class="task-item"><input type="checkbox" data-daily="m3"><span>Ruta colada: bajar ropa sucia del cesto de P1 directo a lavadora en sótano.</span></label>
+          <label class="task-item"><input type="checkbox" data-daily="m4"><span>Planta Baja: Vaciar lavavajillas para recibir el día despejados.</span></label>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">☀️ Mediodía (Cocina & Colada)</div>
+          <label class="task-item"><input type="checkbox" data-daily="d1"><span>Cocina X-J-V: Equipo niños (mesa, lavavajillas y bayeta). L-M: Adultos.</span></label>
+          <label class="task-item"><input type="checkbox" data-daily="d2"><span>Sótano: Poner lavadora del día y tender/secar.</span></label>
+        </div>
+
+        <div class="task-group">
+          <div class="task-group-title">🌙 Noche («Casa a dormir» en familia)</div>
+          <label class="task-item"><input type="checkbox" data-daily="n1"><span>Misión peques: Despejar escritorios (mesa despejada para mañana).</span></label>
+          <label class="task-item"><input type="checkbox" data-daily="n2"><span>Ropa sucia peques: Ropa del día directa al cesto del baño de P1.</span></label>
+          <label class="task-item"><input type="checkbox" data-daily="n3"><span>Barrido de 5 min: Suelo libre de juguetes (dormitorios y cuarto de juegos).</span></label>
+          <label class="task-item"><input type="checkbox" data-daily="n4"><span>Cocina cerrada: Fregadero despejado y lavavajillas funcionando.</span></label>
+          <label class="task-item"><input type="checkbox" data-daily="n5"><span>Escalera despejada: Ningún objeto pernocta en los peldaños.</span></label>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: ZONAS (ROTACIÓN MENSUAL) -->
+    <section id="tab-zonas" class="tab-content">
+      <div class="card">
+        <div class="card-title">
+          <span>Foco Mensual por Altura</span>
+        </div>
+        <div class="zone-select-row">
+          <select id="zone-selector" onchange="renderZoneTasks()">
+            <option value="z1">Semana 1: Zona 1 – Escalera, Entrada y Porche</option>
+            <option value="z2">Semana 2: Zona 2 – Planta Baja (Convivencia y Cocina)</option>
+            <option value="z3">Semana 3: Zona 3 – Planta 1 (Niños y Baño familiar)</option>
+            <option value="z4">Semana 4: Zona 4 – Planta 2 (Dormitorio y Despacho)</option>
+            <option value="z5">Semana 5: Zona 5 – Sótano y Exteriores</option>
+          </select>
+        </div>
+        <div id="zone-task-list"></div>
+      </div>
+    </section>
+
+    <!-- TAB 3: EMPUJÓN ANTI-PROCRASTINACIÓN -->
+    <section id="tab-empujon" class="tab-content">
+      <div class="card empujon-box">
+        <h3>Modo Anti-Procrastinación</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+          Rompe la inercia con una sola acción concreta y temporizador estricto.
+        </p>
+
+        <div id="action-prompt" class="action-card">
+          Pulsa el botón para recibir tu misión de hoy
+        </div>
+
+        <div class="timer-display" id="timer">15:00</div>
+
+        <div class="btn-row">
+          <button class="btn" onclick="startRandomTask(15)">🎯 Foco 15 min (19:00 h)</button>
+          <button class="btn btn-rescue" onclick="startRandomTask(5)">⚡ Rescate 5 min</button>
+          <button class="btn btn-outline" onclick="pauseTimer()">Pausar</button>
+          <button class="btn btn-outline" onclick="resetTimer()">Reiniciar</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <nav>
+    <button class="active" onclick="switchTab('tab-diarias', this)">
+      <span>📋</span><span>Diarias</span>
+    </button>
+    <button onclick="switchTab('tab-zonas', this)">
+      <span>🏢</span><span>Zonas</span>
+    </button>
+    <button onclick="switchTab('tab-empujon', this)">
+      <span>⏱️</span><span>Empujón</span>
+    </button>
+  </nav>
+
+  <script>
+    const zoneData = {
+      z1: {
+        title: "Zona 1: Escalera, Entrada y Porche",
+        tasks: [
+          "Despejar peldaños a cero y vaciar bandejas de descansillo.",
+          "Aspirar o barrer tramos de escalera de arriba abajo.",
+          "Organizar calzado y abrigos en el recibidor.",
+          "Barrer el porche delantero y sacudir felpudo.",
+          "Limpiar huellas de la barandilla y pomo exterior."
+        ]
+      },
+      z2: {
+        title: "Zona 2: Planta Baja (Convivencia y Cocina)",
+        tasks: [
+          "Superficie del «mueblo»: despejarlo a cero y reubicar trastos.",
+          "Mesita frente al sofá: despejar vasos, mandos y pasar bayeta.",
+          "Quitar el polvo del salón (mueble TV, estantes y superficies).",
+          "Limpiar una balda o cajón interior de la nevera.",
+          "Limpiar interior de microondas y frontal del horno.",
+          "Aspirar bajo los cojines y base del sofá."
+        ]
+      },
+      z3: {
+        title: "Zona 3: Planta 1 (Territorio Niños y Baño)",
+        tasks: [
+          "Baño familiar: desinfección a fondo de bañera/ducha y mampara.",
+          "Caza de juguetes: 10 min con peques clasificando cajas temáticas.",
+          "Cajones infantiles: cribar 5 prendas pequeñas o calcetines sueltos.",
+          "Aspirar a fondo el suelo del cuarto de juegos.",
+          "Revisión de mochilas y material escolar en escritorios."
+        ]
+      },
+      z4: {
+        title: "Zona 4: Planta 2 (Dormitorio y Despacho)",
+        tasks: [
+          "Escritorio de estudio: despejar papeles sueltos y organizar cables.",
+          "Mesitas de noche: retirar objetos intrusos y pasar bayeta.",
+          "Armario principal: ordenar una balda o repaso de perchas.",
+          "Aspirar suelo y rodapiés de la zona de estudio.",
+          "Ventilación profunda y sacudir textiles/mantas."
+        ]
+      },
+      z5: {
+        title: "Zona 5: Sótano y Exteriores",
+        tasks: [
+          "Despensa: revisar caducidades de una balda y alinear básicos.",
+          "Zona colada: limpiar filtro de lavadora y bandeja de jabón.",
+          "Deshacer o clasificar una caja acumulada en el garaje.",
+          "Jardín: barrer hojas o dar un repaso de riego.",
+          "Plegar y desechar cartones/reciclaje acumulado."
+        ]
+      }
+    };
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('nav button').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const dailyCheckboxes = document.querySelectorAll('input[data-daily]');
+
+    // Sincronización en la nube (Firestore)
+    async function syncToFirebase(type, id, value) {
+      if (!window.db) return;
+      try {
+        const docRef = window.firestoreDoc(window.db, "hogar", todayStr);
+        await window.firestoreSetDoc(docRef, {
+          [type]: { [id]: value }
+        }, { merge: true });
+      } catch (err) {
+        console.error("Error al guardar en Firebase:", err);
+      }
+    }
+
+    window.addEventListener('firebase-ready', async () => {
+      try {
+        const docRef = window.firestoreDoc(window.db, "hogar", todayStr);
+        const snap = await window.firestoreGetDoc(docRef);
+        if (snap.exists()) {
+          const data = snap.data();
+          if (data.dailies) {
+            dailyCheckboxes.forEach(cb => {
+              if (data.dailies[cb.dataset.daily] !== undefined) {
+                cb.checked = data.dailies[cb.dataset.daily];
+                if (cb.checked) cb.parentElement.classList.add('done');
+                localStorage.setItem('daily_' + cb.dataset.daily, cb.checked);
+              }
+            });
+            updateDailyCount();
+          }
+          if (data.zones) {
+            Object.entries(data.zones).forEach(([key, val]) => {
+              localStorage.setItem('zone_' + key, val);
+            });
+            renderZoneTasks();
+          }
+        }
+      } catch (e) {
+        console.warn("Usando almacenamiento local offline");
+      }
+    });
+
+    // Carga local
+    function loadDailyProgress() {
+      const savedDate = localStorage.getItem('daily_date');
+      if (savedDate !== todayStr) {
+        localStorage.setItem('daily_date', todayStr);
+        dailyCheckboxes.forEach(cb => {
+          cb.checked = false;
+          localStorage.removeItem('daily_' + cb.dataset.daily);
+        });
+      } else {
+        dailyCheckboxes.forEach(cb => {
+          const val = localStorage.getItem('daily_' + cb.dataset.daily);
+          cb.checked = (val === 'true');
+          if (cb.checked) cb.parentElement.classList.add('done');
+        });
+      }
+      updateDailyCount();
+    }
+
+    dailyCheckboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        localStorage.setItem('daily_' + cb.dataset.daily, cb.checked);
+        if (cb.checked) cb.parentElement.classList.add('done');
+        else cb.parentElement.classList.remove('done');
+        updateDailyCount();
+        syncToFirebase('dailies', cb.dataset.daily, cb.checked);
+      });
+    });
+
+    function updateDailyCount() {
+      const total = dailyCheckboxes.length;
+      const checked = Array.from(dailyCheckboxes).filter(cb => cb.checked).length;
+      document.getElementById('daily-progress').innerText = `${checked}/${total}`;
+    }
+
+    function renderZoneTasks() {
+      const zoneKey = document.getElementById('zone-selector').value;
+      const zone = zoneData[zoneKey];
+      const container = document.getElementById('zone-task-list');
+      container.innerHTML = zone.tasks.map((task, idx) => `
+        <label class="task-item">
+          <input type="checkbox" data-zone="${zoneKey}_${idx}" onchange="toggleZoneTask(this)">
+          <span>${task}</span>
+        </label>
+      `).join('');
+
+      container.querySelectorAll('input[data-zone]').forEach(cb => {
+        const val = localStorage.getItem('zone_' + cb.dataset.zone);
+        cb.checked = (val === 'true');
+        if (cb.checked) cb.parentElement.classList.add('done');
+      });
+    }
+
+    function toggleZoneTask(cb) {
+      localStorage.setItem('zone_' + cb.dataset.zone, cb.checked);
+      if (cb.checked) cb.parentElement.classList.add('done');
+      else cb.parentElement.classList.remove('done');
+      syncToFirebase('zones', cb.dataset.zone, cb.checked);
+    }
+
+    // Temporizador
+    let timerInterval = null;
+    let secondsLeft = 900;
+
+    function playBeep() {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+        gain.gain.setValueAtTime(0.2, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.8);
+      } catch (e) {}
+    }
+
+    function updateTimerDisplay() {
+      const m = Math.floor(secondsLeft / 60);
+      const s = secondsLeft % 60;
+      document.getElementById('timer').innerText = 
+        `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
+
+    function startRandomTask(minutes) {
+      clearInterval(timerInterval);
+      secondsLeft = minutes * 60;
+      updateTimerDisplay();
+
+      const zoneKey = document.getElementById('zone-selector').value;
+      const tasks = zoneData[zoneKey].tasks;
+      const randomTask = tasks[Math.floor(Math.random() * tasks.length)];
+      document.getElementById('action-prompt').innerText = randomTask;
+
+      timerInterval = setInterval(() => {
+        if (secondsLeft > 0) {
+          secondsLeft--;
+          updateTimerDisplay();
+        } else {
+          clearInterval(timerInterval);
+          playBeep();
+          alert('¡Tiempo cumplido! Excelente micro-victoria.');
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() { clearInterval(timerInterval); }
+    function resetTimer() {
+      clearInterval(timerInterval);
+      secondsLeft = 900;
+      updateTimerDisplay();
+    }
+
+    loadDailyProgress();
+    renderZoneTasks();
+  </script>
+</body>
+</html>
