@@ -47,12 +47,6 @@
       --accent-slate-blue: #3b7a99;
       --accent-indigo: #6366f1;
 
-      --color-z1: #d99b26;
-      --color-z2: #d96b43;
-      --color-z3: #6366f1;
-      --color-z4: #3b7a99;
-      --color-z5: #2a8370;
-
       --radius: 18px;
       --shadow: 0 4px 20px -2px rgba(44, 41, 38, 0.06);
     }
@@ -123,7 +117,6 @@
       border: 1px solid #c7ebd8;
     }
 
-    /* Termómetro de cabecera integrado */
     .metric-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -177,7 +170,6 @@
     .status-alert.good { background: #eef8f5; color: #1e6b5a; border: 1px solid #c7ebd8; }
     .status-alert.behind { background: #fdf5ea; color: #9c6812; border: 1px solid #fae1b8; }
 
-    /* Secciones y Tareas */
     .section-title {
       font-size: 0.75rem;
       text-transform: uppercase;
@@ -221,6 +213,14 @@
       line-height: 1.35;
       color: var(--text);
     }
+    .task-meta {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
     .task-card.done {
       background: #faf8f5;
       border-color: #efe9df;
@@ -246,7 +246,6 @@
     summary { font-weight: 600; color: var(--accent-terracota); cursor: pointer; outline: none; }
     .task-guide { margin-top: 0.4rem; padding: 0.55rem 0.75rem; background: #faf8f5; border-left: 3px solid var(--accent-terracota); border-radius: 4px; line-height: 1.4; }
 
-    /* Añadir tarea rápida */
     .add-task-row {
       display: flex;
       gap: 6px;
@@ -263,7 +262,6 @@
     }
     .add-task-input:focus { border-color: var(--accent-terracota); }
 
-    /* Botones y Navegación */
     .btn {
       background: var(--accent-eucalyptus);
       color: white;
@@ -330,11 +328,11 @@
   </header>
 
   <main>
-    <!-- TAB 1: PRINCIPAL (TODO INTEGRADO) -->
+    <!-- TAB 1: DASHBOARD ORDENADO -->
     <section id="tab-dashboard" class="tab-content active">
       
-      <!-- 1. TERMÓMETRO DE PROGRESO INTEGRADO -->
-      <div class="card" style="padding: 1rem 1.1rem; margin-bottom: 1rem;">
+      <!-- 1. TERMÓMETRO DE HOY -->
+      <div class="card" style="padding: 1rem 1.1rem; margin-bottom: 1.25rem;">
         <div class="card-header" style="margin-bottom: 0.6rem;">
           <div class="card-title" style="font-size: 0.95rem;">📊 Termómetro de Hoy</div>
           <span class="badge" id="daily-progress-badge">0/0</span>
@@ -357,7 +355,7 @@
         </div>
 
         <div style="font-size: 0.78rem; font-weight: 700; display: flex; justify-content: space-between; margin-top: 4px;">
-          <span>Cumplimiento del Día</span>
+          <span>Cumplimiento Diario</span>
           <span id="daily-percent">0%</span>
         </div>
         <div class="progress-bar-container">
@@ -365,44 +363,8 @@
         </div>
       </div>
 
-      <!-- 2. ZONA ACTIVA DEL MES (Integrada para evitar Out of Sight) -->
-      <div class="card" id="zone-active-card" style="border-top: 4px solid var(--accent-terracota);">
-        <div class="card-header">
-          <div>
-            <div class="card-title" id="active-zone-title">Foco de la Semana: Zona Activa</div>
-            <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">Micro-foco de 15 min al día (4 alturas)</p>
-          </div>
-          <span class="badge" id="zone-progress-badge">0/5</span>
-        </div>
-
-        <div class="progress-bar-container" style="margin-bottom: 1rem;">
-          <div class="progress-bar-fill" id="zone-bar" style="width: 0%; background: var(--accent-terracota);"></div>
-        </div>
-
-        <div id="active-zone-tasks-list"></div>
-
-        <!-- Añadir tarea a la zona -->
-        <div class="add-task-row">
-          <input type="text" id="input-new-zone-task" class="add-task-input" placeholder="+ Añadir tarea a esta zona...">
-          <button class="btn btn-sm btn-terracota" onclick="addNewZoneTask()">Añadir</button>
-        </div>
-      </div>
-
-      <!-- 3. RITMO SEMANAL: SÁBANAS Y TOALLAS -->
-      <div class="card" style="border-left: 4px solid var(--accent-indigo);">
-        <div class="card-header">
-          <div class="card-title">🧺 Ritmo Semanal (Blancos & Textiles)</div>
-          <span class="badge" id="textiles-badge" style="color: var(--accent-indigo); background: #eef2ff; border-color: #c7d2fe;">Textiles</span>
-        </div>
-        <div id="weekly-textiles-list"></div>
-        <div class="add-task-row">
-          <input type="text" id="input-new-textile-task" class="add-task-input" placeholder="+ Añadir tarea semanal...">
-          <button class="btn btn-sm btn-mustard" onclick="addNewTextileTask()">Añadir</button>
-        </div>
-      </div>
-
-      <!-- 4. RUTINAS DIARIAS -->
-      <div class="card">
+      <!-- 2. RUTINAS DIARIAS -->
+      <div class="card" style="margin-bottom: 1.25rem;">
         <div class="card-header">
           <div class="card-title">📋 Rutinas Diarias</div>
         </div>
@@ -427,9 +389,8 @@
         </div>
         <div id="dailies-night-list"></div>
 
-        <!-- Añadir tarea diaria rápida -->
         <div style="margin-top: 1rem; border-top: 1px solid var(--border); padding-top: 0.85rem;">
-          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Añadir rutina diaria personalizada:</div>
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Añadir rutina diaria:</div>
           <div class="add-task-row">
             <select id="select-daily-period" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-dark); font-size: 0.78rem;">
               <option value="morning">🌅 Mañana</option>
@@ -442,23 +403,77 @@
           </div>
         </div>
       </div>
+
+      <!-- 3. RITMO SEMANAL (Debajo de la rutina diaria) -->
+      <div class="card" style="border-left: 4px solid var(--accent-indigo); margin-bottom: 1.25rem;">
+        <div class="card-header">
+          <div class="card-title">🧺 Ritmo Semanal (Blancos & Textiles)</div>
+          <span class="badge" id="textiles-badge" style="color: var(--accent-indigo); background: #eef2ff; border-color: #c7d2fe;">Semanal</span>
+        </div>
+        <div id="weekly-textiles-list"></div>
+        <div class="add-task-row">
+          <input type="text" id="input-new-textile-task" class="add-task-input" placeholder="+ Añadir tarea semanal...">
+          <button class="btn btn-sm btn-mustard" onclick="addNewTextileTask()">Añadir</button>
+        </div>
+      </div>
+
+      <!-- 4. ZONA ACTIVA DEL MES -->
+      <div class="card" id="zone-active-card" style="border-top: 4px solid var(--accent-terracota);">
+        <div class="card-header">
+          <div>
+            <div class="card-title" id="active-zone-title">Foco de la Semana: Zona Activa</div>
+            <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">Micro-foco de 15 min al día (4 alturas)</p>
+          </div>
+          <span class="badge" id="zone-progress-badge">0/5</span>
+        </div>
+
+        <div class="progress-bar-container" style="margin-bottom: 1rem;">
+          <div class="progress-bar-fill" id="zone-bar" style="width: 0%; background: var(--accent-terracota);"></div>
+        </div>
+
+        <div id="active-zone-tasks-list"></div>
+
+        <div class="add-task-row">
+          <input type="text" id="input-new-zone-task" class="add-task-input" placeholder="+ Añadir tarea a esta zona...">
+          <button class="btn btn-sm btn-terracota" onclick="addNewZoneTask()">Añadir</button>
+        </div>
+      </div>
     </section>
 
-    <!-- TAB 2: TEMPORADA (ESTACIONALES) -->
+    <!-- TAB 2: TEMPORADA CON RECURRENCIA -->
     <section id="tab-temporada" class="tab-content">
       <div class="card" style="border-top: 4px solid var(--accent-eucalyptus);">
         <div class="card-header">
           <div>
-            <div class="card-title">🍂 Tareas de Temporada & Mantenimiento Largo</div>
-            <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">Cortinas, fundas, filtros y cambios de armario</p>
+            <div class="card-title">🍂 Tareas de Temporada</div>
+            <p style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">Se reactivan automáticamente tras 3, 6 o 12 meses</p>
           </div>
         </div>
 
-        <div id="season-tasks-list"></div>
+        <!-- Tareas que tocan ahora -->
+        <div class="section-title" style="color: var(--accent-eucalyptus); margin-top: 0.2rem;">
+          <span>🔔 Pendientes / A realizar</span>
+        </div>
+        <div id="season-due-list"></div>
 
-        <div class="add-task-row">
-          <input type="text" id="input-new-season-task" class="add-task-input" placeholder="+ Añadir tarea de temporada...">
-          <button class="btn btn-sm" onclick="addNewSeasonTask()">Añadir</button>
+        <!-- Tareas al día (archivadas temporalmente) -->
+        <details style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 0.8rem;">
+          <summary style="font-size: 0.82rem; color: var(--text-muted);">Ver tareas completadas recientemente (<span id="season-done-count">0</span>)</summary>
+          <div id="season-completed-list" style="margin-top: 0.7rem;"></div>
+        </details>
+
+        <!-- Formulario para añadir con selector de meses -->
+        <div style="margin-top: 1.25rem; border-top: 1px solid var(--border); padding-top: 0.85rem;">
+          <div style="font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px;">Añadir tarea estacional:</div>
+          <div class="add-task-row">
+            <select id="select-season-freq" style="padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-dark); font-size: 0.78rem;">
+              <option value="3">Cada 3 meses</option>
+              <option value="6" selected>Cada 6 meses</option>
+              <option value="12">Cada 1 año</option>
+            </select>
+            <input type="text" id="input-new-season-task" class="add-task-input" placeholder="Nombre de la tarea...">
+            <button class="btn btn-sm" onclick="addNewSeasonTask()">Añadir</button>
+          </div>
         </div>
       </div>
     </section>
@@ -500,7 +515,6 @@
   </nav>
 
   <script>
-    // Audio sintetizado
     function playPopSound() {
       try {
         const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -565,7 +579,6 @@
       animate();
     }
 
-    // Datos maestros iniciales
     const defaultData = {
       dailies: {
         morning: [
@@ -649,11 +662,11 @@
         }
       },
       season: [
-        { id: 's1', title: 'Lavar cortinas del salón y estancias comunes', guide: 'Ciclo delicado y colgar húmedas para evitar plancha.' },
-        { id: 's2', title: 'Lavar fundas de sofá y cojines decorativos', guide: 'Revisar etiquetas de lavado y secar al aire.' },
-        { id: 's3', title: 'Limpieza de filtros de aire acondicionado / calefacción', guide: 'Aspirar o enjuagar filtros bajo el grifo.' },
-        { id: 's4', title: 'Cambio de armario de temporada (adultos y niños)', guide: 'Cajas de almacenamiento y retirada de ropa de otra estación.' },
-        { id: 's5', title: 'Revisión y limpieza a fondo de ventanas y cristales', guide: 'Elegir un día nublado para evitar marcas de sol.' }
+        { id: 's1', title: 'Lavar cortinas del salón y estancias comunes', months: 12, lastDone: null, guide: 'Ciclo delicado y colgar húmedas para evitar plancha.' },
+        { id: 's2', title: 'Lavar fundas de sofá y cojines grandes', months: 6, lastDone: null, guide: 'Revisar etiquetas de lavado y secar al aire.' },
+        { id: 's3', title: 'Limpieza de filtros de climatización / A/A', months: 3, lastDone: null, guide: 'Aspirar o enjuagar filtros bajo el grifo.' },
+        { id: 's4', title: 'Cambio de armario de temporada (adultos y niños)', months: 6, lastDone: null, guide: 'Cajas de almacenamiento y retirada de ropa de otra estación.' },
+        { id: 's5', title: 'Limpieza a fondo de ventanales y cristales exteriores', months: 6, lastDone: null, guide: 'Día nublado para evitar marcas de sol.' }
       ]
     };
 
@@ -685,7 +698,6 @@
       return zoneKey;
     }
 
-    // Sincronización a Firestore
     async function syncToFirebase() {
       if (!window.db) return;
       try {
@@ -696,7 +708,7 @@
           updatedAt: new Date().toISOString()
         }, { merge: true });
       } catch (e) {
-        console.error("Error sincronizando", e);
+        console.error("Error Firebase", e);
       }
     }
 
@@ -737,6 +749,28 @@
       }
     }
 
+    // Toggle específico para Temporada con guardado de fecha
+    function toggleSeasonTask(id) {
+      playPopSound();
+      const task = appData.season.find(t => t.id === id);
+      if (task) {
+        if (!task.lastDone || isSeasonTaskDue(task)) {
+          task.lastDone = todayStr;
+        } else {
+          task.lastDone = null; // Desmarcar si se pulsa de nuevo
+        }
+        saveAndSync();
+      }
+    }
+
+    function isSeasonTaskDue(task) {
+      if (!task.lastDone) return true;
+      const doneDate = new Date(task.lastDone);
+      const now = new Date();
+      const diffMonths = (now.getFullYear() - doneDate.getFullYear()) * 12 + (now.getMonth() - doneDate.getMonth());
+      return diffMonths >= (task.months || 6);
+    }
+
     function deleteTask(type, id, subKey = null) {
       if (!confirm("¿Eliminar esta tarea de la lista?")) return;
       if (type === 'daily') {
@@ -759,7 +793,6 @@
       syncToFirebase();
     }
 
-    // Funciones para añadir tareas
     function addNewDailyTask() {
       const input = document.getElementById('input-new-daily-task');
       const period = document.getElementById('select-daily-period').value;
@@ -794,10 +827,11 @@
 
     function addNewSeasonTask() {
       const input = document.getElementById('input-new-season-task');
+      const months = parseInt(document.getElementById('select-season-freq').value, 10);
       const title = input.value.trim();
       if (!title) return;
       const newId = 'cust_season_' + Date.now();
-      appData.season.push({ id: newId, title: title, guide: 'Mantenimiento de temporada añadido.' });
+      appData.season.push({ id: newId, title: title, months: months, lastDone: null, guide: 'Mantenimiento de temporada añadido.' });
       input.value = '';
       saveAndSync();
     }
@@ -813,6 +847,27 @@
               ${task.guide ? `<details><summary>Detalles / Guía</summary><div class="task-guide"><p>${task.guide}</p></div></details>` : ''}
             </div>
             <button class="btn-delete-task" title="Eliminar" onclick="deleteTask('${deleteType}', '${task.id}', '${subKey}')">✕</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderSeasonTaskHTML(task, isDue) {
+      const monthsText = task.months === 12 ? 'Anual' : `Cada ${task.months} meses`;
+      const dateText = task.lastDone ? `Última vez: ${task.lastDone}` : 'Aún no realizada';
+      return `
+        <div class="task-card ${isDue ? '' : 'done'}">
+          <div class="task-header">
+            <input type="checkbox" ${isDue ? '' : 'checked'} onchange="toggleSeasonTask('${task.id}')">
+            <div class="task-content">
+              <div class="task-title">${task.title}</div>
+              <div class="task-meta">
+                <span>🔄 ${monthsText}</span>
+                <span>• ${dateText}</span>
+              </div>
+              ${task.guide ? `<details><summary>Detalles / Guía</summary><div class="task-guide"><p>${task.guide}</p></div></details>` : ''}
+            </div>
+            <button class="btn-delete-task" title="Eliminar" onclick="deleteTask('season', '${task.id}', null)">✕</button>
           </div>
         </div>
       `;
@@ -834,10 +889,18 @@
       const zoneKey = calculateCurrentWeek();
       const activeZone = appData.zones[zoneKey];
 
-      // Cabecera de la zona activa
-      document.getElementById('active-zone-title').innerText = activeZone.title;
+      // 1. Render Diarias por franja
+      ['morning', 'noon', 'afternoon', 'night'].forEach(period => {
+        const el = document.getElementById(`dailies-${period}-list`);
+        el.innerHTML = appData.dailies[period].map(t => renderTaskHTML(t, 'daily', period)).join('');
+      });
 
-      // Render Zona activa integrada
+      // 2. Render Ritmo Semanal (Textiles)
+      const textilesContainer = document.getElementById('weekly-textiles-list');
+      textilesContainer.innerHTML = appData.textiles.map(t => renderTaskHTML(t, 'textiles', null)).join('');
+
+      // 3. Render Zona activa
+      document.getElementById('active-zone-title').innerText = activeZone.title;
       const zoneContainer = document.getElementById('active-zone-tasks-list');
       zoneContainer.innerHTML = activeZone.tasks.map(t => renderTaskHTML(t, 'zone', zoneKey)).join('');
 
@@ -846,21 +909,21 @@
       const zonePct = activeZone.tasks.length > 0 ? Math.round((doneZoneCount / activeZone.tasks.length) * 100) : 0;
       document.getElementById('zone-bar').style.width = `${zonePct}%`;
 
-      // Render Ritmo Semanal (Textiles / Sábanas y Toallas)
-      const textilesContainer = document.getElementById('weekly-textiles-list');
-      textilesContainer.innerHTML = appData.textiles.map(t => renderTaskHTML(t, 'textiles', null)).join('');
+      // 4. Render Temporada (Pendientes vs Al día)
+      const dueContainer = document.getElementById('season-due-list');
+      const completedContainer = document.getElementById('season-completed-list');
+      
+      const dueTasks = appData.season.filter(t => isSeasonTaskDue(t));
+      const completedTasks = appData.season.filter(t => !isSeasonTaskDue(t));
 
-      // Render Diarias por franja
-      ['morning', 'noon', 'afternoon', 'night'].forEach(period => {
-        const el = document.getElementById(`dailies-${period}-list`);
-        el.innerHTML = appData.dailies[period].map(t => renderTaskHTML(t, 'daily', period)).join('');
-      });
+      dueContainer.innerHTML = dueTasks.length > 0
+        ? dueTasks.map(t => renderSeasonTaskHTML(t, true)).join('')
+        : '<p style="font-size: 0.8rem; color: var(--accent-eucalyptus); font-weight: 600; padding: 0.5rem 0;">✨ Todas las tareas estacionales están al día.</p>';
 
-      // Render Temporada
-      const seasonContainer = document.getElementById('season-tasks-list');
-      seasonContainer.innerHTML = appData.season.map(t => renderTaskHTML(t, 'season', null)).join('');
+      completedContainer.innerHTML = completedTasks.map(t => renderSeasonTaskHTML(t, false)).join('');
+      document.getElementById('season-done-count').innerText = completedTasks.length;
 
-      // Métricas y termómetro integrado
+      // 5. Termómetro
       updateMetrics();
     }
 
@@ -900,7 +963,7 @@
         alertBox.className = 'status-alert behind';
         icon.innerText = '⏳';
         const diff = expectedDaily - doneDaily;
-        msg.innerText = `Tenéis ${diff} ${diff === 1 ? 'tarea pendiente' : 'tareas pendientes'} según la hora actual. ¡Un empujón de 5-10 min y al día!`;
+        msg.innerText = `Tenéis ${diff} ${diff === 1 ? 'tarea pendiente' : 'tareas pendientes'} según la hora actual. ¡Un empujón conjunto de 5-10 min y al día!`;
       }
     }
 
@@ -974,7 +1037,6 @@
       updateTimerDisplay();
     }
 
-    // Arranque inicial
     renderAll();
   </script>
 </body>
